@@ -1,14 +1,17 @@
-# copy-tab-info
+# Copy Tab Info
 
-This template should help get you started developing with Vue 3 in Vite.
+## Prerequisites
 
-## Recommended IDE Setup
+You'll need `python3` and `make` to build this software.
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur) + [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin).
+## Code and Icon generation
 
-## Customize configuration
+We generate icons and schema validator.
 
-See [Vite Configuration Reference](https://vitejs.dev/config/).
+The icons so we don't have to commit any font-awesome icons but use them form npm, and the schema validator because ajv
+otherwise tries to compile the schema validator which is not allowed under unsafe-eval in a chrome extension.
+
+That is what the `generate` script is for in `package.json`'s `scripts` section. `run-s` runs multiple npm scripts one after the other.
 
 ## Project Setup
 
