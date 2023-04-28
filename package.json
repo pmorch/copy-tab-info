@@ -5,25 +5,24 @@
   "scripts": {
     "about:generate": "See README.md about code generation",
     "generate": "make -C generate",
-
     "vite-dev": "vite",
     "dev": "run-s generate vite-dev",
-
     "vite-build": "vite build",
     "build": "run-s generate vite-build",
-
     "vite-preview": "vite preview",
-
     "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs --fix --ignore-path .gitignore",
     "format": "prettier --write src/"
   },
+  "type": "module",
   "dependencies": {
-    "vue": "^3.2.47"
+    "vue": "^3.2.47",
+    "yaml": "^2.2.2"
   },
   "devDependencies": {
     "@rushstack/eslint-patch": "^1.2.0",
     "@vitejs/plugin-vue": "^4.0.0",
     "@vue/eslint-config-prettier": "^7.1.0",
+    "ajv-cli": "^5.0.0",
     "eslint": "^8.34.0",
     "eslint-plugin-vue": "^9.9.0",
     "font-awesome": "^4.7.0",

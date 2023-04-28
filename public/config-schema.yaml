@@ -1,0 +1,30 @@
+optionalProperties:
+  formats:
+    values:
+      properties:
+        template:
+          type: string
+      optionalProperties:
+        joinString:
+          type: string
+        contextMenu:
+          type: boolean
+  remoteRules:
+    elements:
+      type: string
+  urlRules:
+    elements:
+      properties:
+        urlPattern:
+          type: string
+        rules:
+          elements:
+            properties:
+              field:
+                enum:
+                  - title
+                  - url
+              match:
+                type: string
+              replacement:
+                type: string
