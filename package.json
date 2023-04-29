@@ -6,6 +6,7 @@
     "generate": "make -s generate",
     "dev": "make -s dev",
     "build": "make -s build",
+    "release": "make -s release",
     "preview": "make -s preview",
     "lint": "make -s lint",
     "format": "make -s format"
@@ -23,6 +24,7 @@
     "@rushstack/eslint-patch": "^1.2.0",
     "@vitejs/plugin-vue": "^4.0.0",
     "@vue/eslint-config-prettier": "^7.1.0",
+    "adm-zip": "^0.5.10",
     "ajv-cli": "^5.0.0",
     "eslint": "^8.34.0",
     "eslint-plugin-vue": "^9.9.0",
