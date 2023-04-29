@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "about:generate": "See README.md about code generation",
-    "generate": "make -C generate",
+    "generate": "make -C generate --no-print-directory",
     "vite-dev": "vite",
     "dev": "run-s generate vite-dev",
     "vite-build": "vite build",
@@ -15,6 +15,9 @@
   },
   "type": "module",
   "dependencies": {
+    "browser-extension-url-match": "^0.3.3",
+    "lodash.memoize": "^4.1.2",
+    "mustache": "^4.2.0",
     "vue": "^3.2.47",
     "yaml": "^2.2.2"
   },
