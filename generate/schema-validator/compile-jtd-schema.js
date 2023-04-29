@@ -1,8 +1,8 @@
 // There was a problem with using
-// ajv compile -s public/config-schema.yaml --spec=jtd  -o | npx js-beautify > src/generated-code/config-schema-validate.cjs
+// ajv compile -s public/config-schema.yaml --spec=jtd  -o > src/generated-code/config-schema-validate.cjs
 // It generated CommonJS code. vite (for vuejs) doesn't like that.
 // So this will generate ESM code instead.
-// And for JSON Schema (not jtd) there is a bug):
+// And for JSON Schema (not jtd) there is a bug)
 
 import Ajv from "ajv/dist/jtd.js";
 import standaloneCode from "ajv/dist/standalone/index.js"
