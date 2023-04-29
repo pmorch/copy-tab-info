@@ -3,15 +3,12 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "about:generate": "See README.md about code generation",
-    "generate": "make -C generate --no-print-directory",
-    "vite-dev": "vite",
-    "dev": "run-s generate vite-dev",
-    "vite-build": "vite build",
-    "build": "run-s generate vite-build",
-    "vite-preview": "vite preview",
-    "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs --fix --ignore-path .gitignore",
-    "format": "prettier --write src/"
+    "generate": "make -s generate",
+    "dev": "make -s dev",
+    "build": "make -s build",
+    "preview": "make -s preview",
+    "lint": "make -s lint",
+    "format": "make -s format"
   },
   "type": "module",
   "dependencies": {
@@ -30,7 +27,6 @@
     "eslint": "^8.34.0",
     "eslint-plugin-vue": "^9.9.0",
     "font-awesome": "^4.7.0",
-    "npm-run-all": "^4.1.5",
     "png-to-ico": "^2.1.8",
     "prettier": "^2.8.4",
     "sharp": "^0.32.1",
