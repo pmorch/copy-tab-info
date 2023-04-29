@@ -7,20 +7,20 @@ FONTAWESOME_CSS=$(ROOT)/node_modules/font-awesome/css/font-awesome.css
 SIZES=16 32 48 64 128
 FONT_COLOR=1467eb
 
-ROOT=../..
+ROOT=$(shell pwd)/../..
 PUBLIC=$(ROOT)/public
 FAVICON=$(PUBLIC)/favicon.ico
 ONEICON=$(PUBLIC)/icons/link-128.png
 
-all: $(ONEICON) $(FAVICON)
+generate-icons: $(ONEICON) $(FAVICON)
 
 $(FAVICON): $(ONEICON)
 	@echo Creating favicon.ico
 	$(ECHO) npx png-to-ico $(ONEICON) > $(FAVICON)
 
-# iconsicon-font-to-png puts files inside an ./exported directory.
-# I want them in ./. So when --filename "../link-16" is used, the effect
-# is that the files actually get created in ./ . Aftewards we rmdir exported
+# iconsicon-font-to-png puts files inside an ./exported directory if given a
+# relative path, so we use an absolute path $(PUBLIC) here. But
+# icon-font-to-png still creates an exported folder.
 $(ONEICON): python/packages-installed $(FONTAWESOME_CSS) $(FONTAWESOME_TTF)
 	$(ECHO) for size in $(SIZES) ; do \
 		echo Creating icon size: $$size; \
@@ -28,7 +28,7 @@ $(ONEICON): python/packages-installed $(FONTAWESOME_CSS) $(FONTAWESOME_TTF)
 			--css $(FONTAWESOME_CSS) \
 			--ttf $(FONTAWESOME_TTF) \
 			--color "#$(FONT_COLOR)" \
-			--filename "../$(PUBLIC)/icons/link-$$size" \
+			--filename "$(PUBLIC)/icons/link-$$size" \
 			--size $$size link; \
 	done
 	$(ECHO) rmdir exported
