@@ -14,5 +14,5 @@ $(DEST_JS): $(SCHEMA) compile-jtd-schema.js
 	$(ECHO) node compile-jtd-schema.js $(SCHEMA) > $(DEST_JS)
 
 clean:
-	rm $(DEST_JS)
+	rm -f $(DEST_JS)
 
