@@ -5,6 +5,7 @@
   "scripts": {
     "generate": "make -s generate",
     "dev": "make -s dev",
+    "test": "make -s test",
     "build": "make -s build",
     "release": "make -s release",
     "preview": "make -s preview",
@@ -15,6 +16,7 @@
   "dependencies": {
     "browser-extension-url-match": "^0.3.3",
     "lodash.memoize": "^4.1.2",
+    "mocha": "^10.2.0",
     "mustache": "^4.2.0",
     "vue": "^3.2.47",
     "yaml": "^2.2.2"
@@ -26,6 +28,7 @@
     "@vue/eslint-config-prettier": "^7.1.0",
     "adm-zip": "^0.5.10",
     "ajv-cli": "^5.0.0",
+    "chai": "^4.3.7",
     "eslint": "^8.34.0",
     "eslint-plugin-vue": "^9.9.0",
     "font-awesome": "^4.7.0",
