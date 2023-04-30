@@ -6,8 +6,11 @@ dev: generate
 test: generate
 	$(ECHO) npx mocha
 
+watch: generate
+	$(ECHO) npx vite build --sourcemap true --watch
+
 build: generate
-	$(ECHO) npx vite build
+	$(ECHO) npx vite build --sourcemap true
 
 release: build
 	$(ECHO) cd release && node release.cjs

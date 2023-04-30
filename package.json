@@ -6,6 +6,7 @@
     "generate": "make -s generate",
     "dev": "make -s dev",
     "test": "make -s test",
+    "watch": "make -s watch",
     "build": "make -s build",
     "release": "make -s release",
     "preview": "make -s preview",
