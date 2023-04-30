@@ -3,7 +3,7 @@ ECHO=@
 ROOT=$(shell pwd)/../..
 PUBLIC=$(ROOT)/public
 SRC=$(ROOT)/src
-SCHEMA=$(PUBLIC)/config-schema.yaml
+SCHEMA=$(PUBLIC)/configSchema.yaml
 
 DEST_JS=$(ROOT)/src/generated-code/config-schema-validate.js
 

@@ -1,5 +1,5 @@
 // There was a problem with using
-// ajv compile -s public/config-schema.yaml --spec=jtd  -o > src/generated-code/config-schema-validate.cjs
+// ajv compile -s public/configSchema.yaml --spec=jtd  -o > src/generated-code/config-schema-validate.cjs
 // It generated CommonJS code. vite (for vuejs) doesn't like that.
 // So this will generate ESM code instead.
 // And for JSON Schema (not jtd) there is a bug)
