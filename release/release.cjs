@@ -5,7 +5,7 @@ const AdmZip = require('adm-zip');
 try {
   const { base } = parse(resolve(__dirname, '..'));
   const { version } = JSON.parse(
-    readFileSync(resolve(__dirname, '..', 'dist', 'manifest.json'), 'utf8')
+    readFileSync(resolve(__dirname, '..', 'package.json'), 'utf8')
   );
 
   const filename = `${base}-v${version}.zip`;

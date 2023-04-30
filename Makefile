@@ -10,9 +10,7 @@ preview: generate
 	$(ECHO) npx vite preview
 
 release: build
-	$(ECHO) cd release && node pack.cjs
-	echo "Version doesn't come from package.json yet"
-	exit 1
+	$(ECHO) cd release && node release.cjs
 
 .PHONY: generate
 generate:
