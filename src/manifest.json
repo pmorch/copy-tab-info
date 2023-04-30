@@ -11,7 +11,7 @@
     "128": "icons/link-128.png"
   },
   "background": {
-    "service_worker": "background.js"
+    "service_worker": "src/background.js"
   },
   "action": {
     "default_title": "Copy Tab(s)"
@@ -19,5 +19,5 @@
   "permissions": [
     "storage", "activeTab", "clipboardWrite", "contextMenus", "offscreen", "tabs"
   ],
-  "options_page": "options.html"
+  "options_page": "src/options/options.html"
 }

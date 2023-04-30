@@ -33,10 +33,10 @@ function getRenderedTabs(tabs, config, formatName) {
 
 async function writeToClipboard(data) {
   await chrome.offscreen.createDocument({
-    url: 'offscreen.html',
+    url: '/src/offscreen/offscreen.html',
     reasons: [chrome.offscreen.Reason.CLIPBOARD],
     justification: 'Write text to the clipboard.'
-  });
+  })
 
   // Now that we have an offscreen document, we can dispatch the
   // message.
