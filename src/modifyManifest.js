@@ -1,4 +1,4 @@
-import manifest from `./manifest` assert { type: "json" };
+import manifest from `./manifest.json` assert { type: "json" };
 import packageJSON from `../package.json` assert { type: "json" };
 
 export default function makeManifest() {
