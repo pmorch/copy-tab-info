@@ -15,8 +15,6 @@ import yaml from 'yaml'
 // instead:
 import schemaValidator from './generated-code/config-schema-validate.js'
 
-const configResourceFile = 'public/config.yaml';
-
 export function checkConfigSchema(config) {
     const isValid = schemaValidator(config)
     if (!isValid)
@@ -39,28 +37,12 @@ export function contextMenus(config) {
     return cmenus
 }
 
-// makeRemoteConfigFetcher will always be called as makeRemoteConfigFetcher(fetch)
-// where fetch is an implementation of the fetch API
-// but for node.js this will be fetch from 'node-fetch', because raw global.fetch
-// is experimental and spews warnings, while in the browser window.fetch is fine to
-// use. So config_test.mjs supplies fetch from 'node-fetch'.
-export function makeRemoteConfigFetcher(fetcher) {
-    return async function(url) {
-        console.log('getting remote', url)
-        const response = await fetcher(url)
-        const string = await response.text()
-        let config = yaml.parse(string)
-        checkConfigSchema(config)
-        return config
-    }
-}
-
-export const browserFetchRemoteConfig = makeRemoteConfigFetcher(fetch)
-
-export async function fetchRemoteConfigs(remotes, fetcher = browserFetchRemoteConfig) {
+// fetcher is of type async (url: string) => config object
+export async function fetchRemoteConfigs(remotes, fetcher) {
     const configs = []
     for (const remote of remotes) {
         const config = await fetcher(remote)
+        checkConfigSchema(config)
         configs.push(config)
     }
     return configs
@@ -88,12 +70,13 @@ export function mergeConfigs(configs) {
     return config
 }
 
-export async function resolveRemoteConfigs(config, fetch = browserFetchRemoteConfig) {
+// fetcher is of type async (url: string) => config object
+export async function resolveRemoteConfigs(config, fetcher) {
     if (config.remoteRules && config.remoteRules.length > 0) {
-        const remoteConfigs = await fetchRemoteConfigs(config.remoteRules, fetch)
+        const remoteConfigs = await fetchRemoteConfigs(config.remoteRules, fetcher)
         const resolvedRemoteConfigs = []
         for (const r of remoteConfigs) {
-            resolvedRemoteConfigs.push(await resolveRemoteConfigs(r, fetch))
+            resolvedRemoteConfigs.push(await resolveRemoteConfigs(r, fetcher))
         }
         const configs = [...resolvedRemoteConfigs, config]
         config = mergeConfigs(configs)
