@@ -1,4 +1,3 @@
-import { loadYAMLResource } from './loadResource.js'
 import yaml from 'yaml'
 
 // We cannot simply compile the schema runtime,
@@ -18,16 +17,10 @@ import schemaValidator from './generated-code/config-schema-validate.js'
 
 const configResourceFile = 'public/config.yaml';
 
-function checkConfigSchema(config) {
+export function checkConfigSchema(config) {
     const isValid = schemaValidator(config)
     if (!isValid)
         throw new Error(`Unexpected errors from validating config: ${JSON.stringify(schemaValidator.errors)}`)
-}
-
-export async function getConfig() {
-    let config = await loadYAMLResource(configResourceFile)
-    checkConfigSchema(config)
-    return config
 }
 
 export function contextMenus(config) {

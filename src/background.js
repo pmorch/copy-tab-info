@@ -1,18 +1,21 @@
 'use strict';
 
-import { getConfig, contextMenus, resolveRemoteConfigs } from './config.js'
 import Mustache from 'mustache'
+import { parse } from 'yaml'
+
+import { contextMenus, resolveRemoteConfigs } from './config.js'
 import { applyUrlRules } from '../src/urlRules.js'
 
+import factoryConfig from '../public/factoryConfig.yaml?raw'
+
 async function getConfigWithRemotesResolved() {
-  const config = await getConfig()
+  const config = parse(factoryConfig)
   return await resolveRemoteConfigs(config)
 }
 
 getConfigWithRemotesResolved()
-  .then(config => { console.log("config is", config) })
+  .then(config => { console.log("TODO: Removeme - config is", config) })
   .catch(error => { console.log("error from getConfigWithRemotesResolved", error) })
-
 
 async function getTabs() {
   const rawTabs = await chrome.tabs.query({ highlighted: true, currentWindow: true });
