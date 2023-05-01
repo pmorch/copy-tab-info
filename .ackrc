@@ -1,3 +1,4 @@
 --ignore-dir=is:dist
 --ignore-dir=is:node_modules
+--ignore-dir=is:public/monaco
 --ignore-file=is:package-lock.json

@@ -4,6 +4,7 @@ import 'bootstrap/dist/js/bootstrap.esm.js'
 
 import { getConfig, onConfigChange } from '../browserConfig.js'
 import jsonStableStringify from 'json-stable-stringify'
+import MonacoEditor from './MonacoEditor.vue'
 
 export default {
     data() {
@@ -30,7 +31,28 @@ export default {
                 return
             this.config = newVal
         })
-    }
+    },
+    methods: {
+        newConfig(newValue) {
+            if (this.debugNewValue) {
+                console.log('app newValue', newValue)
+            }
+            this.value = newValue
+            this.onYamlValidationErrors(null)
+            this.onSchemaValidationErrors(null)
+        },
+        isMonacoVisible() {
+            return true
+        },
+        onYamlValidationErrors(errors) {
+            this.yamlValidationErrors = errors
+        },
+        onSchemaValidationErrors(errors) {
+            this.schemaValidationErrors = errors
+        },
+
+    },
+    components: { MonacoEditor }
 }
 </script>
 <template>
@@ -58,9 +80,9 @@ export default {
     <div class="container.fluid p-2 d-flex flex-column h-100" v-else>
         <h1>YAML Editor</h1>
         <div class="h-100 d-flex flex-column">
-            <div class="yaml-editor mb-4 flex-grow-1">
-                <pre>{{ config }}</pre>
-            </div>
+            <MonacoEditor class="yaml-editor mb-4 flex-grow-1" :visible="isMonacoVisible()" :value="config"
+                @newValue="newConfig" @yamlValidationErrors="onYamlValidationErrors"
+                @schemaValidationErrors="onSchemaValidationErrors" />
             <div id="validation-errors-alerts" class="d-flex flex-column justify-content-center">
                 <div v-if="yamlValidationErrors == null && schemaValidationErrors == null" class="alert alert-success"
                     role="alert">

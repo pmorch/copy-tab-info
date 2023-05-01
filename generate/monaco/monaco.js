@@ -8,8 +8,6 @@ import 'monaco-editor/esm/vs/basic-languages/yaml/yaml.contribution.js';
 
 import editorWorker from 'monaco-editor/esm/vs/editor/editor.worker?worker'
 
-console.log('monaco is here')
-
 window.monacoExports = {
     editorWorker,
     monaco
