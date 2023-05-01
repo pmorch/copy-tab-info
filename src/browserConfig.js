@@ -1,4 +1,4 @@
-import factoryConfigYAML from '../public/factoryConfig.yaml?raw'
+import factoryConfigYAML from './factoryConfig.yaml?raw'
 import { resolveRemoteConfigs } from './config.js'
 import { parse, stringify } from 'yaml'
 

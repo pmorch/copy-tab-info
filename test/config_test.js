@@ -86,9 +86,9 @@ function parseAndCheckConfig(yaml) {
     return config
 }
 
-// import factoryConfig from '../public/factoryConfig.yaml' assert { type: "text" };
+// import factoryConfig from '../src/factoryConfig.yaml' assert { type: "text" };
 async function getConfig() {
-    const factoryConfigString = (await promises.readFile(resolve(__dirname, '..', 'public', 'factoryConfig.yaml'))).toString()
+    const factoryConfigString = (await promises.readFile(resolve(__dirname, '..', 'src', 'factoryConfig.yaml'))).toString()
     const config = parseAndCheckConfig(factoryConfigString)
     return config
 }
