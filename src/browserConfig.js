@@ -11,6 +11,10 @@ async function remoteConfigFetcher(url) {
     return config
 }
 
+export async function getResolvedConfig() {
+    return await resolveRemoteConfigs(getConfig(), remoteConfigFetcher)
+}
+
 function hasStorage() {
     return typeof (chrome) !== 'undefined' && typeof (chrome.storage) !== 'undefined'
 }
@@ -36,7 +40,7 @@ export async function setConfig(config) {
 }
 
 export async function resetConfig() {
-    await chrome.storage.sync.set({config: factoryConfigYAML })
+    await chrome.storage.sync.set({ config: factoryConfigYAML })
 }
 
 const changeFuncs = []
@@ -44,21 +48,17 @@ export function onConfigChange(changeFunc) {
     changeFuncs.push(changeFunc)
 }
 
-chrome.storage.onChanged.addListener((changes, namespace) => {
-    // console.log('onChange', namespace, changes)
-    if (namespace !== "sync")
-        throw new Error("Only expected changes to storage")
-    // console.log(changes)
-    for (let cf of changeFuncs) {
-        cf(changes.config.oldValue, changes.config.newValue)
-    }
-    // for (let [key, { oldValue, newValue }] of Object.entries(changes)) {
-    //     for 
-    //     console.log(
-    //         `Storage key "${key}" in namespace "${namespace}" changed to\n${newValue}`
-    //     );
-    // }
-});
+if (hasStorage()) {
+    chrome.storage.onChanged.addListener((changes, namespace) => {
+        // console.log('onChange', namespace, changes)
+        if (namespace !== "sync")
+            throw new Error("Only expected changes to storage")
+        // console.log(changes)
+        for (let cf of changeFuncs) {
+            cf(changes.config.oldValue, changes.config.newValue)
+        }
+    })
+}
 
 self.debugConfig = {
     get: getConfig,
@@ -75,8 +75,3 @@ self.debugConfig = {
         })
     }
 }
-
-export async function getResolvedConfig() {
-    return await resolveRemoteConfigs(getConfig(), remoteConfigFetcher)
-}
-
