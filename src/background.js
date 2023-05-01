@@ -1,28 +1,14 @@
 'use strict';
 
 import Mustache from 'mustache'
-import { parse } from 'yaml'
 
-import { contextMenus, resolveRemoteConfigs } from './config.js'
-import { applyUrlRules } from '../src/urlRules.js'
-
-import factoryConfig from '../public/factoryConfig.yaml?raw'
-
-async function remoteConfigFetcher(url) {
-  console.log('getting remote', url)
-  const response = (await fetch(url)).text()
-  let config = parse(string)
-  return config
-}
-
-async function getConfigWithRemotesResolved() {
-  const config = parse(factoryConfig)
-  return await resolveRemoteConfigs(config, remoteConfigFetcher)
-}
+import { contextMenus } from './config.js'
+import { applyUrlRules } from './urlRules.js'
+import { getResolvedConfig } from './browserConfig.js'
 
 (async function () {
   try {
-    const config = await getConfigWithRemotesResolved()
+    const config = await getResolvedConfig()
     console.log("TODO: Removeme - config is", config)
   } catch (e) {
     console.log("error from getConfigWithRemotesResolved", e)
@@ -60,7 +46,7 @@ async function writeToClipboard(data) {
 }
 
 async function refreshContextMenu() {
-  const config = await getConfigWithRemotesResolved()
+  const config = await getResolvedConfig()
   chrome.contextMenus.removeAll();
   let cmenus = contextMenus(config)
   for (const cmenu of cmenus) {
@@ -72,7 +58,7 @@ refreshContextMenu()
 
 chrome.action.onClicked.addListener(async (tab) => {
   const tabs = await getTabs()
-  const config = await getConfigWithRemotesResolved()
+  const config = await getResolvedConfig()
   const HTML = getRenderedTabs(tabs, config, 'HTML')
   const text = getRenderedTabs(tabs, config, 'text')
   const data = { text, HTML }
@@ -82,7 +68,7 @@ chrome.action.onClicked.addListener(async (tab) => {
 chrome.contextMenus.onClicked.addListener(async function (info, tab) {
   const formatName = info.menuItemId
   const tabs = await getTabs()
-  const config = await getConfigWithRemotesResolved()
+  const config = await getResolvedConfig()
   if (!(formatName in config.formats)) {
     throw new Error(`How could ${formatName} be unknown and not in config.formats?`)
   }
