@@ -1,11 +1,16 @@
 <script>
+import 'bootstrap/dist/css/bootstrap.min.css'
+import 'bootstrap/dist/js/bootstrap.esm.js'
+
 import { getConfig, onConfigChange } from '../browserConfig.js'
 import jsonStableStringify from 'json-stable-stringify'
 
 export default {
     data() {
         return {
-            config: null
+            config: null,
+            yamlValidationErrors: null,
+            schemaValidationErrors: null
         }
     },
     async mounted() {
@@ -29,9 +34,78 @@ export default {
 }
 </script>
 <template>
-    <p v-if="config === null">Config is null</p>
-    <div v-else>
-        <p>This is config:</p>
-        <pre>{{ config }}</pre>
+    <!-- Modal -->
+    <div class="modal fade" id="resetConfigModal" tabindex="-1" aria-labelledby="resetConfigModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="resetConfigModalLabel">Reset Configuration</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Are you sure you want to reset back to the factory configuration?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button @click="resetConfig" type="button" class="btn btn-primary"
+                        data-bs-dismiss="modal">Reset</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <p v-if="config === null">Loading config...</p>
+    <div class="container.fluid p-2 d-flex flex-column h-100" v-else>
+        <h1>YAML Editor</h1>
+        <div class="h-100 d-flex flex-column">
+            <div class="yaml-editor mb-4 flex-grow-1">
+                <pre>{{ config }}</pre>
+            </div>
+            <div id="validation-errors-alerts" class="d-flex flex-column justify-content-center">
+                <div v-if="yamlValidationErrors == null && schemaValidationErrors == null" class="alert alert-success"
+                    role="alert">
+                    <b>YAML</b> and <b>Schema</b> are both valid
+                </div>
+                <div v-else-if="yamlValidationErrors != null" class="alert alert-danger" role="alert">
+                    <p><b>YAML</b> is invalid:</p>
+                    <pre class="mb-0">{{ yamlValidationErrors }}</pre>
+                </div>
+                <div v-else-if="schemaValidationErrors != null" class="alert alert-danger" role="alert">
+                    <p><b>Schema</b> is invalid:</p>
+                    <p v-for="error in schemaValidationErrors"><code>{{ error.instancePath }}</code>: {{ error.message }}
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div>
+            <button class="btn btn-primary"
+                :class="{ disabled: yamlValidationErrors != null || schemaValidationErrors != null }"
+                @click="save">Save</button>
+            <button type="button" class="ms-2 btn btn-secondary" data-bs-toggle="modal" data-bs-target="#resetConfigModal">
+                Reset configuration...
+            </button>
+        </div>
     </div>
 </template>
+
+<style>
+html,
+body,
+#app {
+    height: 100vh;
+}
+
+#validation-errors-alerts {
+    height: 200px;
+    overflow-y: auto;
+}
+
+.yaml-editor {
+    /* This makes no sense to me.
+     If this is missing growing works, but shrinking doesn't
+     With this present, height acts as min-height, which is exactly what I want */
+    height: 150px;
+    border: 2px solid grey;
+    overflow: hidden
+}
+</style>
