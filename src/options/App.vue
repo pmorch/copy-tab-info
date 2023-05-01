@@ -1,5 +1,7 @@
 <script>
 import { getConfig, onConfigChange } from '../browserConfig.js'
+import jsonStableStringify from 'json-stable-stringify'
+
 export default {
     data() {
         return {
@@ -9,17 +11,20 @@ export default {
     async mounted() {
         const config = await getConfig()
         this.config = config
-        // onConfigChange((oldVal, newVal) => {
-        //     // One could use this:
-        //     // https://www.npmjs.com/package/json-stable-stringify
-        //     // to compare the this.config with newVal to see if this
-        //     // is a real config change
-        //     //
-        //     // But we'll need to debounce it to ensure that config changes that we performed in the past
-        //     // don't cause us to revert to a previous value
-        //     // The config really should have a version number so we can detect if this is a new or old change
-        //     // here be dragons: Linear version numbers in a distributed system? This is asking for trouble...
-        // })
+        onConfigChange((oldVal, newVal) => {
+            // There is a potential race condition here. If we save a config,
+            // and we assume it takes an hour for the onConfigChange to fire,
+            // the user could save again in the mean time. Then when the
+            // onConfigChange eventually fires, we will set it back to an old
+            // version and then when the second onConfigChange fires, we will
+            // set it to the new version. I think it is unlikely to happen in
+            // real life, though.
+
+            // We do check though that 'essentially' this is the same value
+            if (jsonStableStringify(this.config) === jsonStableStringify(newVal))
+                return
+            this.config = newVal
+        })
     }
 }
 </script>

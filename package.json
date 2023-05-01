@@ -16,6 +16,7 @@
   "type": "module",
   "dependencies": {
     "browser-extension-url-match": "^0.3.3",
+    "json-stable-stringify": "^1.0.2",
     "lodash.memoize": "^4.1.2",
     "mocha": "^10.2.0",
     "monaco-editor": "^0.37.1",
