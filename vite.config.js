@@ -28,6 +28,7 @@ export default defineConfig({
         offscreen: resolve(__dirname, 'src', 'offscreen', 'offscreen.html'),
       },
       output: {
+        sourcemap: true,
         entryFileNames: (assetInfo) => {
           // assetInfo.facadeModuleId contains the input file's full path
           if (assetInfo.facadeModuleId && assetInfo.facadeModuleId.match(/\.js$/)) {
