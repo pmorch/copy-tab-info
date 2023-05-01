@@ -1,28 +1,37 @@
 import { createApp } from 'vue'
 import App from './App.vue'
-
-
-// See "About the Monaco Editor" in the project's README.md and don't just
-// import * as monaco from 'monaco-editor'
-// it creates a huge bundle...
-import 'monaco-editor/esm/vs/editor/browser/coreCommands.js';
-import 'monaco-editor/esm/vs/editor/contrib/find/browser/findController.js';
-import * as monaco from 'monaco-editor/esm/vs/editor/editor.api.js';
-import 'monaco-editor/esm/vs/basic-languages/yaml/yaml.contribution.js';
-
-import editorWorker from 'monaco-editor/esm/vs/editor/editor.worker?worker'
+import appendHTMLTagToBody from '../appendHTMLTagToBody.js'
 
 createApp(App).mount('#app')
 
-self.MonacoEnvironment = {
-    getWorker(_, label) {
-        return new editorWorker()
+// See README.md about how the monaco bundling
+async function loadMonaco() {
+    try {
+        await appendHTMLTagToBody('script', {
+            src: '/monaco/monaco.js',
+            type: "module",
+            async: true
+
+        })
+        await appendHTMLTagToBody('link', {
+            href: '/monaco/monaco.css',
+            rel: "stylesheet",
+        })
+    } catch (e) {
+        console.log("Error loading monaco", e);
     }
+
+    window.MonacoEnvironment = {
+        getWorker(_, label) {
+            return new window.monacoExports.editorWorker()
+        }
+    }
+    window.editor = window.monacoExports.monaco.editor.create(document.getElementById('monaco-editor'), {
+        value: '{}',
+        language: 'yaml',
+        minimap: { enabled: false },
+        automaticLayout: true,
+    })
 }
 
-const editor = monaco.editor.create(document.getElementById('monaco-editor'), {
-    value: '{}',
-    language: 'yaml',
-    minimap: { enabled: false },
-    automaticLayout: true,
-})
+loadMonaco()
