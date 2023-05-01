@@ -36,3 +36,16 @@ npm run build
 ```sh
 npm run lint
 ```
+
+## About the Monaco Editor
+
+We're using the [Monaco editor](https://microsoft.github.io/monaco-editor/) for YAML editing. It _is_ rather huge. I've used [this example](https://github.com/microsoft/monaco-editor/tree/main/samples/browser-esm-webpack-small), where I've used the imports from `./index.js`. Keep in mind that this repo uses a slightly older version of `monaco-editor`, but to update the imports to fit whatever version we're using e.g. `0.37.1`:
+
+```sh
+cd monaco-editor/samples
+npm install monaco-editor@0.37.1
+cd browser-esm-webpack-small
+npm run generate-imports
+```
+
+That will update `./index.js` with the imports appropriate for that version.
