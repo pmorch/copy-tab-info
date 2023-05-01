@@ -7,6 +7,8 @@ import { resolve, dirname } from "path";
 
 import modifyManifest from './src/modifyManifest.js'
 
+import packageJSON from `./package.json` assert { type: "json" };
+
 const rootDir = fileURLToPath(new URL('.', import.meta.url));
 
 // https://vitejs.dev/config/
@@ -15,6 +17,9 @@ export default defineConfig({
     vue(),
     modifyManifest(),
   ],
+  define: {
+    __APP_VERSION__: JSON.stringify(packageJSON.version)
+  },
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url))
