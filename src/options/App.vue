@@ -5,14 +5,21 @@ import 'bootstrap/dist/js/bootstrap.esm.js'
 import { getConfig, setConfig, resetConfig, onConfigChange } from '../browserConfig.js'
 import jsonStableStringify from 'json-stable-stringify'
 import MonacoEditor from './MonacoEditor.vue'
-import { parse } from 'yaml'
+
+const pageNavItems = [
+    { name: 'formats', title: "Formats" },
+    { name: 'urlRules', title: "URL Rules" },
+    { name: 'editor', title: "Editor" },
+]
 
 export default {
     data() {
         return {
             config: null,
             yamlValidationErrors: null,
-            schemaValidationErrors: null
+            schemaValidationErrors: null,
+            pageNavItem: pageNavItems[0],
+            pageNavItems
         }
     },
     async mounted() {
@@ -55,6 +62,15 @@ export default {
         },
         resetConfig() {
             resetConfig()
+        },
+        navItemClass(item) {
+            return {
+                "nav-link": true,
+                active: item.name == this.pageNavItem.name
+            }
+        },
+        ariaCurrent(item) {
+            return item.name == this.pageNavItem.name
         }
 
     },
@@ -83,29 +99,51 @@ export default {
     </div>
 
     <p v-if="config === null">Loading config...</p>
-    <div class="container.fluid p-2 d-flex flex-column h-100" v-else>
-        <h1>YAML Editor</h1>
-        <div class="h-100 d-flex flex-column">
-            <MonacoEditor class="yaml-editor mb-4 flex-grow-1" :visible="isMonacoVisible()" :value="config"
-                @newValue="newConfig" @yamlValidationErrors="onYamlValidationErrors"
-                @schemaValidationErrors="onSchemaValidationErrors" />
-            <div id="validation-errors-alerts" class="d-flex flex-column justify-content-center">
-                <div v-if="yamlValidationErrors == null && schemaValidationErrors == null" class="alert alert-success"
-                    role="alert">
-                    <b>YAML</b> and <b>Schema</b> are both valid
-                </div>
-                <div v-else-if="yamlValidationErrors != null" class="alert alert-danger" role="alert">
-                    <p><b>YAML</b> is invalid:</p>
-                    <pre class="mb-0">{{ yamlValidationErrors }}</pre>
-                </div>
-                <div v-else-if="schemaValidationErrors != null" class="alert alert-danger" role="alert">
-                    <p><b>Schema</b> is invalid:</p>
-                    <p v-for="error in schemaValidationErrors"><code>{{ error.instancePath }}</code>: {{ error.message }}
-                    </p>
+    <div class="container.fluid d-flex flex-column h-100" v-else>
+        <nav class="navbar navbar-expand-xxl navbar-dark bg-dark p-2 mx-n2" aria-label="Seventh navbar example">
+            <img class="me-2" src="/icons/link-32.png">
+            <span class="navbar-brand">Copy Tab Info Options:</span>
+
+            <div class="collapse navbar-collapse" id="navbarsExampleXxl">
+                <ul class="navbar-nav me-auto mb-2 mb-xl-0">
+                    <li class="nav-item" v-for="pni in pageNavItems">
+                        <a :class="navItemClass(pni)" @click="pageNavItem = pni"
+                            :aria-current="ariaCurrent(pni)" href="#">{{ pni.title }}</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+        <h4 class="p-2 mb-0">{{pageNavItem.title}}</h4>
+        <div class="container.fluid p-2 d-flex flex-column h-100" v-if="pageNavItem.name == 'formats'">
+            <pre v-for="format in config.formats">{{ format }}</pre>
+        </div>
+        <div class="container.fluid p-2 d-flex flex-column h-100" v-else-if="pageNavItem.name == 'editor'">
+            <div class="h-100 d-flex flex-column">
+                <MonacoEditor class="yaml-editor mb-4 flex-grow-1" :visible="isMonacoVisible()" :value="config"
+                    @newValue="newConfig" @yamlValidationErrors="onYamlValidationErrors"
+                    @schemaValidationErrors="onSchemaValidationErrors" />
+                <div id="validation-errors-alerts" class="d-flex flex-column justify-content-center">
+                    <div v-if="yamlValidationErrors == null && schemaValidationErrors == null" class="alert alert-success"
+                        role="alert">
+                        <b>YAML</b> and <b>Schema</b> are both valid
+                    </div>
+                    <div v-else-if="yamlValidationErrors != null" class="alert alert-danger" role="alert">
+                        <p><b>YAML</b> is invalid:</p>
+                        <pre class="mb-0">{{ yamlValidationErrors }}</pre>
+                    </div>
+                    <div v-else-if="schemaValidationErrors != null" class="alert alert-danger" role="alert">
+                        <p><b>Schema</b> is invalid:</p>
+                        <p v-for="error in schemaValidationErrors"><code>{{ error.instancePath }}</code>: {{ error.message
+                        }}
+                        </p>
+                    </div>
                 </div>
             </div>
         </div>
-        <div>
+        <div class="container.fluid p-2 d-flex flex-column h-100" v-else>
+            No "{{pageNavItem.title}}" implementation yet
+        </div>
+        <div class="p-2">
             <button class="btn btn-primary"
                 :class="{ disabled: yamlValidationErrors != null || schemaValidationErrors != null }"
                 @click="saveConfig">Save</button>
