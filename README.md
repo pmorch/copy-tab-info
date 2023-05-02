@@ -8,10 +8,12 @@ You'll need `python3` and `make` to build this software.
 
 We generate icons and schema validator.
 
-The icons so we don't have to commit any font-awesome icons but use them form npm, and the schema validator because ajv
-otherwise tries to compile the schema validator which is not allowed under unsafe-eval in a chrome extension.
+The icons so we don't have to commit any font-awesome icons but use them form
+npm, and the schema validator because ajv otherwise tries to compile the schema
+validator which is not allowed under unsafe-eval in a chrome extension.
 
-That is what the `generate` script is for in `package.json`'s `scripts` section. `run-s` runs multiple npm scripts one after the other.
+That is what the `generate` script is for in `package.json`'s `scripts` section.
+`run-s` runs multiple npm scripts one after the other.
 
 ## Project Setup
 
@@ -77,4 +79,6 @@ cd browser-esm-webpack-small
 npm run generate-imports
 ```
 
-That will update the example's `./index.js` with the imports appropriate for that version.
+That will update the example's `./index.js` with the imports appropriate for
+that version. See also this [stackoverflow
+answer](https://stackoverflow.com/a/76151598/345716).
