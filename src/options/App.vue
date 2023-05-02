@@ -2,9 +2,10 @@
 import 'bootstrap/dist/css/bootstrap.min.css'
 import 'bootstrap/dist/js/bootstrap.esm.js'
 
-import { getConfig, onConfigChange } from '../browserConfig.js'
+import { getConfig, setConfig, resetConfig, onConfigChange } from '../browserConfig.js'
 import jsonStableStringify from 'json-stable-stringify'
 import MonacoEditor from './MonacoEditor.vue'
+import { parse } from 'yaml'
 
 export default {
     data() {
@@ -17,7 +18,7 @@ export default {
     async mounted() {
         const config = await getConfig()
         this.config = config
-        onConfigChange((oldVal, newVal) => {
+        onConfigChange((newVal) => {
             // There is a potential race condition here. If we save a config,
             // and we assume it takes an hour for the onConfigChange to fire,
             // the user could save again in the mean time. Then when the
@@ -29,15 +30,14 @@ export default {
             // We do check though that 'essentially' this is the same value
             if (jsonStableStringify(this.config) === jsonStableStringify(newVal))
                 return
-            this.config = newVal
+            this.newConfig(newVal)
         })
     },
     methods: {
         newConfig(newValue) {
             if (this.debugNewValue) {
-                console.log('app newValue', newValue)
             }
-            this.value = newValue
+            this.config = newValue
             this.onYamlValidationErrors(null)
             this.onSchemaValidationErrors(null)
         },
@@ -50,6 +50,12 @@ export default {
         onSchemaValidationErrors(errors) {
             this.schemaValidationErrors = errors
         },
+        saveConfig() {
+            setConfig(this.config)
+        },
+        resetConfig() {
+            resetConfig()
+        }
 
     },
     components: { MonacoEditor }
@@ -102,7 +108,7 @@ export default {
         <div>
             <button class="btn btn-primary"
                 :class="{ disabled: yamlValidationErrors != null || schemaValidationErrors != null }"
-                @click="save">Save</button>
+                @click="saveConfig">Save</button>
             <button type="button" class="ms-2 btn btn-secondary" data-bs-toggle="modal" data-bs-target="#resetConfigModal">
                 Reset configuration...
             </button>

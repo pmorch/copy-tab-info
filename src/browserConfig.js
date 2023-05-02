@@ -55,7 +55,7 @@ if (hasStorage()) {
             throw new Error("Only expected changes to storage")
         // console.log(changes)
         for (let cf of changeFuncs) {
-            cf(changes.config.oldValue, changes.config.newValue)
+            cf(parse(changes.config.newValue), parse(changes.config.oldValue))
         }
     })
 }
@@ -70,8 +70,8 @@ self.debugConfig = {
         return
     },
     watch() {
-        onConfigChange((oldValue, newValue) => {
-            console.log({ old: oldValue, new: newValue })
+        onConfigChange((nv, ov) => {
+            console.log({ nv, ov })
         })
     }
 }
