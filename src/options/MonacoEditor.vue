@@ -41,10 +41,7 @@ export default {
                 // whitespaces, indents etc should not matter, so run it through this "cycle" to normalize the data to detect changes reliably.
                 const editorYaml = stringify(parse(this.monacoEditor.getValue()))
                 const changed = (yaml != editorYaml)
-                console.log('Monaco Editor changed', changed)
-                if (this.debugNewValue) {
-                    console.log('Monaco Editor changed', changed)
-                }
+                // console.log('Monaco Editor changed', changed)
                 if (changed) {
                     this.monacoEditor.setValue(stringify(this.value))
                 }
