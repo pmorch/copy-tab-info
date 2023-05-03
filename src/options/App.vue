@@ -3,8 +3,9 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 import 'bootstrap/dist/js/bootstrap.esm.js'
 
 import { getConfig, setConfig, resetConfig, onConfigChange } from '../browserConfig.js'
-import jsonStableStringify from 'json-stable-stringify'
+import * as deep from '../deep.js'
 import MonacoEditor from './MonacoEditor.vue'
+import URLRules from './URLRules.vue'
 
 const pageNavItems = [
     { name: 'formats', title: "Formats" },
@@ -12,13 +13,15 @@ const pageNavItems = [
     { name: 'editor', title: "Editor" },
 ]
 
+const initialPageNavItemName = 'urlRules'
+
 export default {
     data() {
         return {
             config: null,
             yamlValidationErrors: null,
             schemaValidationErrors: null,
-            pageNavItem: pageNavItems[0],
+            pageNavItem: pageNavItems.filter(ni => ni.name === initialPageNavItemName)[0],
             pageNavItems
         }
     },
@@ -34,8 +37,9 @@ export default {
             // set it to the new version. I think it is unlikely to happen in
             // real life, though.
 
-            // We do check though that 'essentially' this is the same value
-            if (jsonStableStringify(this.config) === jsonStableStringify(newVal))
+            // We do check though that 'essentially' this is the same value, so
+            // we we don't call newConfig because newConfig set the value
+            if (deep.equal(this.config, newVal))
                 return
             this.newConfig(newVal)
         })
@@ -71,10 +75,12 @@ export default {
         },
         ariaCurrent(item) {
             return item.name == this.pageNavItem.name
+        },
+        setUrlRules(nv) {
+            this.config.urlRules = nv
         }
-
     },
-    components: { MonacoEditor }
+    components: { MonacoEditor, URLRules }
 }
 </script>
 <template>
@@ -107,15 +113,18 @@ export default {
             <div class="collapse navbar-collapse" id="navbarsExampleXxl">
                 <ul class="navbar-nav me-auto mb-2 mb-xl-0">
                     <li class="nav-item" v-for="pni in pageNavItems">
-                        <a :class="navItemClass(pni)" @click="pageNavItem = pni"
-                            :aria-current="ariaCurrent(pni)" href="#">{{ pni.title }}</a>
+                        <a :class="navItemClass(pni)" @click="pageNavItem = pni" :aria-current="ariaCurrent(pni)"
+                            href="#">{{ pni.title }}</a>
                     </li>
                 </ul>
             </div>
         </nav>
-        <h4 class="p-2 mb-0">{{pageNavItem.title}}</h4>
+        <h4 class="p-2 mb-0">{{ pageNavItem.title }}</h4>
         <div class="container.fluid p-2 d-flex flex-column h-100" v-if="pageNavItem.name == 'formats'">
-            <pre v-for="format in config.formats">{{ format }}</pre>
+            <pre v-for="(format, name) in config.formats">{{ name }} : {{ format }}</pre>
+        </div>
+        <div class="container.fluid p-2 d-flex flex-column h-100" v-else-if="pageNavItem.name == 'urlRules'">
+            <URLRules :rules="config.urlRules" @urlRulesChanged="setUrlRules"></URLRules>
         </div>
         <div class="container.fluid p-2 d-flex flex-column h-100" v-else-if="pageNavItem.name == 'editor'">
             <div class="h-100 d-flex flex-column">
@@ -141,7 +150,7 @@ export default {
             </div>
         </div>
         <div class="container.fluid p-2 d-flex flex-column h-100" v-else>
-            No "{{pageNavItem.title}}" implementation yet
+            No "{{ pageNavItem.title }}" implementation yet
         </div>
         <div class="p-2">
             <button class="btn btn-primary"
