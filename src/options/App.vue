@@ -119,7 +119,7 @@ export default {
         </nav>
         <h4 class="p-2 mb-0">{{ pageNavItem.title }}</h4>
         <div class="container.fluid p-2 d-flex flex-column h-100" v-if="pageNavItem.name == 'formats'">
-            <pre v-for="(format, name) in config.formats">{{ name }} : {{ format }}</pre>
+            <pre v-for="(format, name) in config.formats"> {{ name }} : {{ format }}</pre>
         </div>
         <div class="container.fluid p-2 d-flex flex-column h-100" v-else-if="pageNavItem.name == 'urlRules'">
             <URLRules :rules="config.urlRules" @urlRulesChanged="setUrlRules"></URLRules>
