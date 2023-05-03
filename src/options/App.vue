@@ -2,7 +2,7 @@
 import 'bootstrap/dist/css/bootstrap.min.css'
 import 'bootstrap/dist/js/bootstrap.esm.js'
 
-import { getConfig, setConfig, resetConfig, onConfigChange } from '../browserConfig.js'
+import { getConfig, setConfig, resetConfig as resetBrowserConfig, onConfigChange } from '../browserConfig.js'
 import * as deep from '../deep.js'
 import MonacoEditor from './MonacoEditor.vue'
 import URLRules from './URLRules.vue'
@@ -63,7 +63,7 @@ export default {
             setConfig(this.config)
         },
         resetConfig() {
-            resetConfig()
+            resetBrowserConfig()
         },
         navItemClass(item) {
             return {
