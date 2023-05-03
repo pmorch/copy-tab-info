@@ -46,8 +46,6 @@ export default {
     },
     methods: {
         newConfig(newValue) {
-            if (this.debugNewValue) {
-            }
             this.config = newValue
             this.onYamlValidationErrors(null)
             this.onSchemaValidationErrors(null)
