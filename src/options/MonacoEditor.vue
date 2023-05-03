@@ -6,10 +6,10 @@
 // And see about monaco in the project's README.md
 
 import throttle from 'lodash/throttle.js'
+import { parse, stringify } from 'yaml'
 
 import schemaValidator from '../generated-code/config-schema-validate.js'
-
-import { parse, stringify } from 'yaml'
+import * as deep from '../deep.js'
 
 self.MonacoEnvironment = {
     getWorker(_, label) {
@@ -37,12 +37,10 @@ export default {
                 if (!this.monacoEditor || this.pendingChange) {
                     return
                 }
-                const yaml = stringify(this.value)
                 // whitespaces, indents etc should not matter, so run it through this "cycle" to normalize the data to detect changes reliably.
-                const editorYaml = stringify(parse(this.monacoEditor.getValue()))
-                const changed = (yaml != editorYaml)
-                // console.log('Monaco Editor changed', changed)
-                if (changed) {
+                const equal = deep.equal(this.value, parse(this.monacoEditor.getValue()))
+                // console.log('Monaco Editor equal', equal)
+                if (! equal) {
                     this.monacoEditor.setValue(stringify(this.value))
                 }
             }),
