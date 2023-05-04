@@ -3,6 +3,7 @@ export default {
     props: {
         format: null
     },
+    emits: ['formatChanged'],
     methods: {
         setTemplate(nv) {
             const format = {

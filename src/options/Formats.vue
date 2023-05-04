@@ -21,6 +21,7 @@ export default {
         formats: null,
     },
     components: { VueDraggable, Format },
+    emits: ['formatsChanged'],
     methods: {
         emitFormatsCopyChanged() {
             const formats = [
