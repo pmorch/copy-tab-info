@@ -25,9 +25,9 @@ export default {
     methods: {
         emitFormatsCopyChanged() {
             const formats = [
-                    ...this.formatsCopy
-                ]
-                this.$emit('formatsChanged', formats)
+                ...this.formatsCopy
+            ]
+            this.$emit('formatsChanged', formats)
         },
         onSorted(e, ...args) {
             // https://github.com/Alfred-Skyblue/vue-draggable-plus/issues/15 about nextTick
