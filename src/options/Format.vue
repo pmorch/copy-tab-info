@@ -17,9 +17,15 @@ export default {
 </script>
 
 <template>
-    <div>
+    <div class="format my-2">
         <p>template: {{ format.template }}</p>
         <input type="text" :value="format.template" @input="e => setTemplate(e.target.value)" />
         <pre>{{ format }}</pre>
     </div>
 </template>
+
+<style>
+    div.format {
+        border: 1px solid red
+    }
+</style>
