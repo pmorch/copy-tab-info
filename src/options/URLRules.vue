@@ -1,11 +1,3 @@
-<template>
-    <VueDraggable ref="el" v-model="list">
-        <div v-for="item in list" :key="item.index">
-            {{ item }}
-        </div>
-    </VueDraggable>
-</template>
-
 <script>
 
 import * as deep from '../deep.js'
@@ -61,3 +53,11 @@ export default {
     }
 }
 </script>
+
+<template>
+    <VueDraggable ref="el" v-model="list">
+        <div v-for="item in list" :key="item.index">
+            {{ item }}
+        </div>
+    </VueDraggable>
+</template>

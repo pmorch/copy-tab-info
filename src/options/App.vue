@@ -4,8 +4,9 @@ import 'bootstrap/dist/js/bootstrap.esm.js'
 
 import { getConfig, setConfig, resetConfig as resetBrowserConfig, onConfigChange } from '../browserConfig.js'
 import * as deep from '../deep.js'
-import MonacoEditor from './MonacoEditor.vue'
+import Formats from './Formats.vue'
 import URLRules from './URLRules.vue'
+import MonacoEditor from './MonacoEditor.vue'
 
 const pageNavItems = [
     { name: 'formats', title: "Formats" },
@@ -13,7 +14,7 @@ const pageNavItems = [
     { name: 'editor', title: "Editor" },
 ]
 
-const initialPageNavItemName = 'urlRules'
+const initialPageNavItemName = 'formats'
 
 export default {
     data() {
@@ -76,9 +77,13 @@ export default {
         },
         setUrlRules(nv) {
             this.config.urlRules = nv
+        },
+        setFormats(nv) {
+            console.log('setFormats', nv)
+            this.config.formats = nv
         }
     },
-    components: { MonacoEditor, URLRules }
+    components: { Formats, URLRules, MonacoEditor }
 }
 </script>
 <template>
@@ -104,12 +109,12 @@ export default {
 
     <p v-if="config === null">Loading config...</p>
     <div class="container.fluid d-flex flex-column h-100" v-else>
-        <nav class="navbar navbar-expand-xxl navbar-dark bg-dark p-2 mx-n2" aria-label="Seventh navbar example">
+        <nav class="navbar navbar-expand navbar-dark bg-dark p-2 mx-n2">
             <img class="me-2" src="/icons/link-32.png">
             <span class="navbar-brand">Copy Tab Info Options:</span>
 
             <div class="collapse navbar-collapse" id="navbarsExampleXxl">
-                <ul class="navbar-nav me-auto mb-2 mb-xl-0">
+                <ul class="navbar-nav me-auto mb-0">
                     <li class="nav-item" v-for="pni in pageNavItems">
                         <a :class="navItemClass(pni)" @click="pageNavItem = pni" :aria-current="ariaCurrent(pni)"
                             href="#">{{ pni.title }}</a>
@@ -119,7 +124,7 @@ export default {
         </nav>
         <h4 class="p-2 mb-0">{{ pageNavItem.title }}</h4>
         <div class="container.fluid p-2 d-flex flex-column h-100" v-if="pageNavItem.name == 'formats'">
-            <pre v-for="(format, name) in config.formats"> {{ name }} : {{ format }}</pre>
+            <Formats :formats="config.formats" @formatsChanged="setFormats"></Formats>
         </div>
         <div class="container.fluid p-2 d-flex flex-column h-100" v-else-if="pageNavItem.name == 'urlRules'">
             <URLRules :rules="config.urlRules" @urlRulesChanged="setUrlRules"></URLRules>
