@@ -1,7 +1,8 @@
 <template>
-    <VueDraggable v-model="formatsCopy" @update="onSorted">
+    <VueDraggable v-model="formatsCopy" @update="onSorted" @start="dragging = true" @end="dragging = false">
         <div v-for="(format, index) in formatsCopy" :key="`format-${index}`">
-            <Format :format="format" @formatChanged="nv => formatChanged(index, nv)"></Format>
+            <Format :format="format" :dragging="dragging" @formatChanged="nv => formatChanged(index, nv)"
+                @delete="formatDelete(index)"></Format>
         </div>
     </VueDraggable>
 </template>
@@ -14,12 +15,11 @@ import Format from './Format.vue'
 export default {
     data() {
         return {
-            formatsCopy: [...this.formats]
+            formatsCopy: [...this.formats],
+            dragging: false,
         }
     },
-    props: {
-        formats: null,
-    },
+    props: ['formats'],
     components: { VueDraggable, Format },
     emits: ['formatsChanged'],
     methods: {
@@ -38,6 +38,9 @@ export default {
         formatChanged(index, nv) {
             this.formatsCopy[index] = nv
             this.emitFormatsCopyChanged()
+        },
+        formatDelete(index) {
+            this.formatsCopy.splice(index, 1)
         },
     },
     watch: {

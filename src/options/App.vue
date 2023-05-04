@@ -2,6 +2,8 @@
 import 'bootstrap/dist/css/bootstrap.min.css'
 import 'bootstrap/dist/js/bootstrap.esm.js'
 
+import 'font-awesome/css/font-awesome.css'
+
 import { getConfig, setConfig, resetConfig as resetBrowserConfig, onConfigChange } from '../browserConfig.js'
 import * as deep from '../deep.js'
 import Formats from './Formats.vue'
@@ -23,7 +25,7 @@ export default {
             yamlValidationErrors: null,
             schemaValidationErrors: null,
             pageNavItem: pageNavItems.filter(ni => ni.name === initialPageNavItemName)[0],
-            pageNavItems
+            pageNavItems,
         }
     },
     async mounted() {
@@ -123,7 +125,7 @@ export default {
             </div>
         </nav>
         <h4 class="p-2 mb-0">{{ pageNavItem.title }}</h4>
-        <div class="container.fluid p-2 d-flex flex-column h-100" v-if="pageNavItem.name == 'formats'">
+        <div class="container.fluid p-2 d-flex flex-column flex-grow" v-if="pageNavItem.name == 'formats'">
             <Formats :formats="config.formats" @formatsChanged="setFormats"></Formats>
         </div>
         <div class="container.fluid p-2 d-flex flex-column h-100" v-else-if="pageNavItem.name == 'urlRules'">
