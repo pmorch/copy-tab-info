@@ -1,16 +1,16 @@
 formats:
-  HTML:
+  - name: HTML
     template: '<a href="{{url}}">{{title}}<a>{{#suffix}}: "{{.}}"{{/suffix}}'
     joinString: <br>
     contextMenu: false
-  text:
+  - name: text
     template: |
       {{{title}}}{{#suffix}}: "{{{.}}}"{{/suffix}}
       {{{url}}}
     contextMenu: false
-  Markdown:
+  - name: Markdown
     template: '[{{{title}}}]({{{url}}}){{#suffix}}: "{{{.}}}"{{/suffix}}'
-  Asciidoc:
+  - name: Asciidoc
     template: 'link:{{{url}}}({{{title}}}){{#suffix}}: "{{{.}}}"{{/suffix}}'
 remoteRules: []
   # See https://www.jsdelivr.com/?docs=gh

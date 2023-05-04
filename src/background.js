@@ -21,7 +21,7 @@ async function getTabs() {
 }
 
 function getRenderedTabs(tabs, config, formatName) {
-  const format = config.formats[formatName]
+  const format = config.formats.filter(e => e.name === formatName)[0]
   const joinString = 'joinString' in format ? format.joinString : "\n"
   for (const tab of tabs) {
     applyUrlRules(tab, config.urlRules)

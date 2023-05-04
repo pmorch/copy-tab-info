@@ -1,7 +1,9 @@
 optionalProperties:
   formats:
-    values:
+    elements:
       properties:
+        name:
+          type: string
         template:
           type: string
       optionalProperties:
