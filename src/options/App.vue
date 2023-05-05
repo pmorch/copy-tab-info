@@ -65,8 +65,9 @@ export default {
         saveConfig() {
             setConfig(this.config)
         },
-        resetConfig() {
-            resetBrowserConfig()
+        async resetConfig() {
+            await resetBrowserConfig()
+            this.config = await getConfig()
         },
         navItemClass(item) {
             return {
