@@ -65,16 +65,22 @@ export default {
             <div class="card-text">
                 <form>
                     <div class="form-group row">
+                        <label for="name" class="col-2 col-form-label">Name</label>
+                        <div class="col-10">
+                            <input type="text" class="form-control" id="name" v-model="format.name">
+                        </div>
+                    </div>
+                    <div class="form-group row mt-2">
                         <label for="template" class="col-2 col-form-label">Template</label>
                         <div class="col-10">
-                            <input type="text" class="form-control" id="template"
-                                v-model="format.template">
+                            <input type="text" class="form-control" id="template" v-model="format.template">
                         </div>
                     </div>
                     <div class="form-group row mt-2">
                         <label for="joinString" class="col-2 col-form-label">Join string</label>
                         <div class="col-10">
-                            <input type="text" class="form-control" id="joinString" v-model="format.joinString" placeholder="Join String">
+                            <input type="text" class="form-control" id="joinString" v-model="format.joinString"
+                                placeholder="Join String">
                         </div>
                     </div>
                     <div class="form-group row mt-2">
@@ -159,4 +165,5 @@ div.format {
 .trash-icon {
     color: #d63333;
     cursor: pointer;
-}</style>
+}
+</style>
