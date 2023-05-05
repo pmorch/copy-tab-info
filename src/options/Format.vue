@@ -40,6 +40,20 @@ export default {
         deleteFormat() {
             this.$emit('delete')
         },
+    },
+    computed: {
+        contextMenuBool: {
+            get() {
+                return !('contextMenu' in this.format)
+            },
+            set(nv) {
+                if (nv) {
+                    delete this.format.contextMenu
+                } else {
+                    this.format.contextMenu = false
+                }
+            }
+        }
     }
 }
 </script>
@@ -66,7 +80,7 @@ export default {
                     <div class="form-group row mt-2">
                         <label for="contextMenu" class="col-2 col-form-label">Context menu</label>
                         <div class="col-10">
-                            {{ format.contextMenu }}
+                            <input type="checkbox" class="form-check-input mt-3" id="contextMenu" v-model="contextMenuBool">
                         </div>
                     </div>
                 </form>
@@ -88,10 +102,11 @@ export default {
                     <div class="name">Join string</div>
                     <div class="value"><code>{{ format.joinString }}</code></div>
                 </div>
-                <div class="line" v-if="'contextMenu' in format">
+                <div class="line">
                     <div class="name">Context menu</div>
                     <div class="value">
-                        <div class="fa fa-times no-context-icon" title="Not in context menu"></div>
+                        <div v-if="contextMenuBool" class="fa fa-check context-icon" title="Not in context menu"></div>
+                        <div v-else class="fa fa-times no-context-icon" title="Not in context menu"></div>
                     </div>
                 </div>
             </div>
@@ -122,6 +137,12 @@ div.format {
     position: absolute;
     top: 0;
     right: 0;
+}
+
+.context-icon {
+    color: green;
+    cursor: pointer;
+    font-size: larger;
 }
 
 .no-context-icon {

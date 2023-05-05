@@ -148,8 +148,8 @@ export default {
                     </div>
                     <div v-else-if="schemaValidationErrors != null" class="alert alert-danger" role="alert">
                         <p><b>Schema</b> is invalid:</p>
-                        <p v-for="error in schemaValidationErrors"><code>{{ error.instancePath }}</code>: {{ error.message
-                        }}
+                        <p v-for="error in schemaValidationErrors">
+                            <code>{{ error.instancePath }}</code>: {{ error.message }}
                         </p>
                     </div>
                 </div>
@@ -166,6 +166,9 @@ export default {
                 Reset configuration...
             </button>
         </div>
+        <!--
+        <pre>{{ config }}</pre>
+        -->
     </div>
 </template>
 
