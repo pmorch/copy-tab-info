@@ -63,17 +63,31 @@ export default {
         <div class="card-body" v-if="editing">
             <h5 class="card-title">Editing: {{ format.name }}</h5>
             <div class="card-text">
-                <form>
+                <form class="was-validated">
                     <div class="form-group row">
                         <label for="name" class="col-2 col-form-label">Name</label>
                         <div class="col-10">
-                            <input type="text" class="form-control" id="name" v-model="format.name">
+                            <input type="text" class="form-control" id="name" v-model="format.name" required>
+                        </div>
+                        <div class="invalid-feedback">
+                            Please provide a name for the format.
                         </div>
                     </div>
                     <div class="form-group row mt-2">
-                        <label for="template" class="col-2 col-form-label">Template</label>
+                        <label for="template" class="col-2 col-form-label">
+                            Template
+                            <a href="https://mustache.github.io/mustache.5.html" target="_blank">
+                                <div class="fa fa-question-circle-o question-icon" title="Template is a Mustache Template">
+                                </div>
+                            </a>
+                        </label>
                         <div class="col-10">
-                            <input type="text" class="form-control" id="template" v-model="format.template">
+                            <input type="text" class="form-control" id="template" v-model="format.template" required>
+                        </div>
+                        <div class="invalid-feedback">
+                            Please provide a
+                            <a href="https://mustache.github.io/mustache.5.html" target="_blank">Mustache template</a>
+                            for the format.
                         </div>
                     </div>
                     <div class="form-group row mt-2">
@@ -101,7 +115,13 @@ export default {
             </div>
             <div class="card-text">
                 <div class="line">
-                    <div class="name">Template</div>
+                    <div class="name">
+                        Template
+                        <a href="https://mustache.github.io/mustache.5.html" target="_blank">
+                            <div class="fa fa-question-circle-o question-icon" title="Template is a Mustache Template">
+                            </div>
+                        </a>
+                    </div>
                     <div class="value"><code>{{ format.template }}</code></div>
                 </div>
                 <div class="line" v-if="'joinString' in format">
@@ -165,5 +185,11 @@ div.format {
 .trash-icon {
     color: #d63333;
     cursor: pointer;
+}
+
+.question-icon {
+    color: black;
+    cursor: pointer;
+
 }
 </style>
