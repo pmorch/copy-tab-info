@@ -75,7 +75,6 @@ export default {
             this.config.urlRules = nv
         },
         setFormats(nv) {
-            console.log('setFormats', nv)
             this.config.formats = nv
         },
     },
