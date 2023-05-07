@@ -115,7 +115,6 @@ export default {
             this.$emit('yamlValidationErrors', null)
             const errors = validateConfig(jsValue)
             if (errors) {
-                console.log(errors)
                 this.$emit('configValidationErrors', errors)
                 return
             }
