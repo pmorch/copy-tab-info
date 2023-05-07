@@ -4,6 +4,7 @@ import 'bootstrap/dist/js/bootstrap.esm.js'
 
 import 'font-awesome/css/font-awesome.css'
 
+import { validateConfig } from '../config.js'
 import { getConfig, setConfig, resetConfig as resetBrowserConfig, onConfigChange } from '../browserConfig.js'
 import * as deep from '../deep.js'
 import Formats from './Formats.vue'
@@ -23,7 +24,7 @@ export default {
         return {
             config: null,
             yamlValidationErrors: null,
-            configValidationErrors: null,
+            monacoConfigValidationErrors: null,
             pageNavItem: pageNavItems.filter(ni => ni.name === initialPageNavItemName)[0],
             pageNavItems,
         }
@@ -51,7 +52,7 @@ export default {
         newConfig(newValue) {
             this.config = newValue
             this.onYamlValidationErrors(null)
-            this.onConfigValidationErrors(null)
+            this.onMonacoConfigValidationErrors(null)
         },
         isMonacoVisible() {
             return true
@@ -59,8 +60,8 @@ export default {
         onYamlValidationErrors(errors) {
             this.yamlValidationErrors = errors
         },
-        onConfigValidationErrors(errors) {
-            this.configValidationErrors = errors
+        onMonacoConfigValidationErrors(errors) {
+            this.monacoConfigValidationErrors = errors
         },
         saveConfig() {
             setConfig(this.config)
@@ -84,6 +85,13 @@ export default {
         setFormats(nv) {
             console.log('setFormats', nv)
             this.config.formats = nv
+        }
+    },
+    computed: {
+        configValidationErrors() {
+            if (this.monacoConfigValidationErrors)
+                return this.monacoConfigValidationErrors
+            return validateConfig(this.config)
         }
     },
     components: { Formats, URLRules, MonacoEditor }
@@ -115,11 +123,10 @@ export default {
         <nav class="navbar navbar-expand navbar-dark bg-dark p-2 mx-n2">
             <img class="me-2" src="/icons/link-32.png">
             <span class="navbar-brand">Copy Tab Info Options:</span>
-
             <div class="collapse navbar-collapse" id="navbarsExampleXxl">
                 <ul class="navbar-nav me-auto mb-0">
                     <li class="nav-item" v-for="pni in pageNavItems">
-                        <a :class="navItemClass(pni)" @click="pageNavItem = pni" :aria-current="ariaCurrent(pni)"
+                        <a :class="navItemClass(pni)" @click.prevent="pageNavItem = pni; false" :aria-current="ariaCurrent(pni)"
                             href="#">{{ pni.title }}</a>
                     </li>
                 </ul>
@@ -133,30 +140,22 @@ export default {
             <URLRules :rules="config.urlRules" @urlRulesChanged="setUrlRules"></URLRules>
         </div>
         <div class="container.fluid p-2 d-flex flex-column h-100" v-else-if="pageNavItem.name == 'editor'">
-            <div class="h-100 d-flex flex-column">
-                <MonacoEditor class="yaml-editor mb-4 flex-grow-1" :visible="isMonacoVisible()" :value="config"
-                    @newValue="newConfig" @yamlValidationErrors="onYamlValidationErrors"
-                    @configValidationErrors="onConfigValidationErrors" />
-                <div id="validation-errors-alerts" class="d-flex flex-column justify-content-center">
-                    <div v-if="yamlValidationErrors == null && configValidationErrors == null" class="alert alert-success"
-                        role="alert">
-                        <b>YAML</b> and <b>Schema</b> are both valid
-                    </div>
-                    <div v-else-if="yamlValidationErrors != null" class="alert alert-danger" role="alert">
-                        <p><b>YAML</b> is invalid:</p>
-                        <pre class="mb-0">{{ yamlValidationErrors }}</pre>
-                    </div>
-                    <div v-else-if="configValidationErrors != null" class="alert alert-danger" role="alert">
-                        <p><b>Schema</b> is invalid:</p>
-                        <p v-for="error in configValidationErrors">
-                            <code>{{ error.path }}</code>: {{ error.message }}
-                        </p>
-                    </div>
-                </div>
-            </div>
+            <MonacoEditor class="yaml-editor mb-4 flex-grow-1" :visible="isMonacoVisible()" :value="config"
+                @newValue="newConfig" @yamlValidationErrors="onYamlValidationErrors"
+                @configValidationErrors="onMonacoConfigValidationErrors" />
         </div>
         <div class="container.fluid p-2 d-flex flex-column h-100" v-else>
             No "{{ pageNavItem.title }}" implementation yet
+        </div>
+        <div v-if="yamlValidationErrors != null" class="alert alert-danger" role="alert">
+            <p><b>YAML</b> is invalid:</p>
+            <pre class="mb-0">{{ yamlValidationErrors }}</pre>
+        </div>
+        <div v-else-if="configValidationErrors != null" class="alert alert-danger" role="alert">
+            <p><b>Configuration</b> is invalid:</p>
+            <p v-for="error in configValidationErrors">
+                <code>{{ error.path }}</code>: {{ error.message }}
+            </p>
         </div>
         <div class="p-2">
             <button class="btn btn-primary"
@@ -177,11 +176,6 @@ html,
 body,
 #app {
     height: 100vh;
-}
-
-#validation-errors-alerts {
-    height: 200px;
-    overflow-y: auto;
 }
 
 .yaml-editor {
