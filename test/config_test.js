@@ -12,14 +12,12 @@ const __dirname = url.fileURLToPath(new URL('.', import.meta.url));
 
 const config1YAML = `
 formats:
-    HTML:
-        template: <a href="%{URL}">%{ESCAPED_TITLE}</a>
+    -   name: HTML
+        template: htmlTemplate
         joinString: <br>
         contextMenu: false
-    text:
-        template: |
-            old format: %{TITLE}
-            %{URL}
+    -   name: text
+        template: oldTextTemplate
         contextMenu: true
 remoteRules:
 - https://server/url1
@@ -33,12 +31,10 @@ urlRules:
 
 const config2YAML = `
 formats:
-    text:
-        template: |
-            %{TITLE}
-            %{URL}
+    -   name: text
+        template: newTextTemplate
         contextMenu: true
-    Markdown:
+    -   name: Markdown
         template: "[%{TITLE}](%{URL})"
 remoteRules:
 - https://server/url2
@@ -52,16 +48,14 @@ urlRules:
 
 const expectedMergeYAML = `
 formats:
-    HTML:
-        template: <a href="%{URL}">%{ESCAPED_TITLE}</a>
+    -   name: HTML
+        template: htmlTemplate
         joinString: <br>
         contextMenu: false
-    text:
-        template: |
-            %{TITLE}
-            %{URL}
+    -   name: text
+        template: newTextTemplate
         contextMenu: true
-    Markdown:
+    -   name: Markdown
         template: "[%{TITLE}](%{URL})"
 remoteRules:
 - https://server/url1
@@ -81,7 +75,7 @@ urlRules:
 
 function parseAndCheckConfig(yaml) {
     const config = parse(yaml)
-    assert.isTrue(schemaValidator(config))
+    assert.isTrue(schemaValidator(config), `schema is valid: ${yaml}`)
     assert.isNull(schemaValidator.errors)
     return config
 }
@@ -98,7 +92,7 @@ describe('config', async function () {
     describe('factoryConfig', () => {
         it('should be a config', async () => {
             assert.typeOf(config, "object")
-            assert.typeOf(config.formats, "object")
+            assert.typeOf(config.formats, "array")
             assert.typeOf(config.urlRules, "array")
         });
     })
@@ -163,28 +157,27 @@ describe('config', async function () {
 
         function fetchConfig(url) {
             config = {
-                formats: {
-                    ['format_' + url]: {
-                        template: `This is url: ${url}`
-                    }
-                },
+                formats: [{
+                    name: 'format_' + url,
+                    template: `This is url: ${url}`
+                }],
                 urlRules: [{
                     urlPattern: 'http://server_' + url,
                     rules: []
                 }]
             }
             let remotes = []
-            if (url == 5)
-                remotes = [1, 2]
-            if (url == 6)
-                remotes = [3, 4]
-            if (url == 7)
-                remotes = [5, 6]
+            if (url == "5")
+                remotes = ["1", "2"]
+            if (url == "6")
+                remotes = ["3", "4"]
+            if (url == "7")
+                remotes = ["5", "6"]
             config.remoteRules = remotes
             return config
         }
         it('can fetchRemoteConfigs', async function () {
-            const origConfig = fetchConfig(7)
+            const origConfig = fetchConfig("7")
             const resolved = await configModule.fetchRemoteConfigs(origConfig.remoteRules, fetchConfig)
             const servers = resolved.map(r => parseInt(r.urlRules[0].urlPattern.replace(/^http:\/\/server_/, '')))
             const expect = [5, 6]

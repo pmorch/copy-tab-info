@@ -18,19 +18,18 @@ import schemaValidator from './generated-code/config-schema-validate.js'
 export function checkConfigSchema(config) {
     const isValid = schemaValidator(config)
     if (!isValid)
-        throw new Error(`Unexpected errors from validating config: ${JSON.stringify(schemaValidator.errors)}`)
+        throw new Error(`Unexpected errors from validating config: ${JSON.stringify(schemaValidator.errors, null, '    ')}`)
 }
 
 export function contextMenus(config) {
     let cmenus = []
-    for (const name in config.formats) {
-        let format = config.formats[name]
+    for (const format of config.formats) {
         if (('contextMenu' in format) && !format.contextMenu) {
             continue;
         }
         cmenus.push({
-            id: name,
-            title: name,
+            id: format.name,
+            title: format.name,
             contexts: ["action"]
         })
     }
@@ -50,14 +49,20 @@ export async function fetchRemoteConfigs(remotes, fetcher) {
 
 export function mergeConfigs(configs) {
     const config = {
-        formats: {},
+        formats: [],
         remoteRules: [],
         urlRules: []
     }
+    const seenFormats = {}
     for (const c of configs) {
         if (c.formats) {
-            for (const f in c.formats) {
-                config.formats[f] = c.formats[f]
+            for (const format of c.formats) {
+                if (format.name in seenFormats) {
+                    config.formats[seenFormats[format.name]] = format
+                } else {
+                    seenFormats[format.name] = config.formats.length
+                    config.formats.push(format)
+                }
             }
         }
         if (c.remoteRules) {
