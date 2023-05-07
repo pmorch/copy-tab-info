@@ -5,19 +5,12 @@ import 'bootstrap/dist/js/bootstrap.esm.js'
 import 'font-awesome/css/font-awesome.css'
 
 import { validateConfig } from '../config.js'
+import routes from './routes'
 import { getConfig, setConfig, resetConfig as resetBrowserConfig, onConfigChange } from '../browserConfig.js'
 import * as deep from '../deep.js'
 import Formats from './Formats.vue'
 import URLRules from './URLRules.vue'
 import MonacoEditor from './MonacoEditor.vue'
-
-const pageNavItems = [
-    { name: 'formats', title: "Formats" },
-    { name: 'urlRules', title: "URL Rules" },
-    { name: 'editor', title: "Editor" },
-]
-
-const initialPageNavItemName = 'formats'
 
 export default {
     data() {
@@ -25,8 +18,7 @@ export default {
             config: null,
             yamlValidationErrors: null,
             monacoConfigValidationErrors: null,
-            pageNavItem: pageNavItems.filter(ni => ni.name === initialPageNavItemName)[0],
-            pageNavItems,
+            routes,
         }
     },
     async mounted() {
@@ -73,11 +65,11 @@ export default {
         navItemClass(item) {
             return {
                 "nav-link": true,
-                active: item.name == this.pageNavItem.name
+                active: item.name == this.$route.name
             }
         },
         ariaCurrent(item) {
-            return item.name == this.pageNavItem.name
+            return item.name == this.$route.name
         },
         setUrlRules(nv) {
             this.config.urlRules = nv
@@ -85,7 +77,7 @@ export default {
         setFormats(nv) {
             console.log('setFormats', nv)
             this.config.formats = nv
-        }
+        },
     },
     computed: {
         configValidationErrors() {
@@ -125,27 +117,27 @@ export default {
             <span class="navbar-brand">Copy Tab Info Options:</span>
             <div class="collapse navbar-collapse" id="navbarsExampleXxl">
                 <ul class="navbar-nav me-auto mb-0">
-                    <li class="nav-item" v-for="pni in pageNavItems">
-                        <a :class="navItemClass(pni)" @click.prevent="pageNavItem = pni; false" :aria-current="ariaCurrent(pni)"
-                            href="#">{{ pni.title }}</a>
+                    <li class="nav-item" v-for="route in routes">
+                        <a v-if="'name' in route" :class="navItemClass(route)"
+                            :aria-current="ariaCurrent(route)" :href="`#${route.path}`">{{ route.meta.title }}</a>
                     </li>
                 </ul>
             </div>
         </nav>
-        <h4 class="p-2 mb-0">{{ pageNavItem.title }}</h4>
-        <div class="container.fluid p-2 d-flex flex-column flex-grow" v-if="pageNavItem.name == 'formats'">
+        <h4 class="p-2 mb-0">{{ $route.meta.title }}</h4>
+        <div class="container.fluid p-2 d-flex flex-column flex-grow" v-if="$route.name == 'formats'">
             <Formats :formats="config.formats" @formatsChanged="setFormats"></Formats>
         </div>
-        <div class="container.fluid p-2 d-flex flex-column h-100" v-else-if="pageNavItem.name == 'urlRules'">
+        <div class="container.fluid p-2 d-flex flex-column h-100" v-else-if="$route.name == 'urlRules'">
             <URLRules :rules="config.urlRules" @urlRulesChanged="setUrlRules"></URLRules>
         </div>
-        <div class="container.fluid p-2 d-flex flex-column h-100" v-else-if="pageNavItem.name == 'editor'">
+        <div class="container.fluid p-2 d-flex flex-column h-100" v-else-if="$route.name == 'editor'">
             <MonacoEditor class="yaml-editor mb-4 flex-grow-1" :visible="isMonacoVisible()" :value="config"
                 @newValue="newConfig" @yamlValidationErrors="onYamlValidationErrors"
                 @configValidationErrors="onMonacoConfigValidationErrors" />
         </div>
         <div class="container.fluid p-2 d-flex flex-column h-100" v-else>
-            No "{{ pageNavItem.title }}" implementation yet
+            No "{{ $route.meta.title }}" implementation yet
         </div>
         <div v-if="yamlValidationErrors != null" class="alert alert-danger" role="alert">
             <p><b>YAML</b> is invalid:</p>

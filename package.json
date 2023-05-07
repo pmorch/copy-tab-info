@@ -25,6 +25,7 @@
     "mustache": "^4.2.0",
     "vue": "^3.2.47",
     "vue-draggable-plus": "^0.1.5",
+    "vue-router": "^4.1.6",
     "yaml": "^2.2.2"
   },
   "devDependencies": {

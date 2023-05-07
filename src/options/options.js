@@ -1,6 +1,10 @@
 import { createApp } from 'vue'
+import { createRouter, createWebHashHistory } from 'vue-router'
+
 import App from './App.vue'
 import appendHTMLTagToBody from '../appendHTMLTagToBody.js'
+
+import routes from './routes'
 
 // See README.md about how the monaco bundling
 async function loadMonaco() {
@@ -22,7 +26,16 @@ async function loadMonaco() {
 
 async function loadPage() {
     await loadMonaco()
-    createApp(App).mount('#app')
+
+    const app = createApp(App)
+
+    const router = createRouter({
+        history: createWebHashHistory(),
+        routes,
+    })
+    app.use(router)
+
+    app.mount('#app')
 }
 
 loadPage()
