@@ -6,7 +6,7 @@ import { assert } from 'chai'
 import schemaValidator from '../src/generated-code/config-schema-validate.js'
 import { parse } from 'yaml'
 import * as url from 'url';
-import { resolve} from 'path';
+import { resolve } from 'path';
 
 const __dirname = url.fileURLToPath(new URL('.', import.meta.url));
 
@@ -95,6 +95,70 @@ describe('config', async function () {
             assert.typeOf(config.formats, "array")
             assert.typeOf(config.urlRules, "array")
         });
+    })
+    describe('validateConfig', () => {
+        it('validates corner format cases', () => {
+            const testcases = [
+                {
+                    formats: [
+                        {
+                            name: "foo",
+                            template: "footemplate"
+                        }
+                    ],
+                    expect: null
+                },
+                {
+                    formats: [
+                        {
+                            name: "",
+                            template: "footemplate"
+                        }
+                    ],
+                    expect: [{
+                        path: '/formats/0/name',
+                        message: 'name is required'
+                    }]
+                },
+                {
+                    formats: [
+                        {
+                            name: "foo",
+                            template: "footemplate"
+                        },
+                        {
+                            name: "foo",
+                            template: "footemplate"
+                        },
+                    ],
+                    expect: [{
+                        path: '/formats/1/name',
+                        message: 'name "foo" is not unique'
+                    }]
+                },
+                {
+                    formats: [
+                        {
+                            name: "foo",
+                            template: ""
+                        }
+                    ],
+                    expect: [{
+                        path: '/formats/0/template',
+                        message: 'template is required'
+                    }]
+                },
+            ]
+            for (const tc of testcases) {
+                const config = {
+                    formats: tc.formats,
+                    urlRules: [],
+                    remoteRules: [],
+                }
+                const errors = configModule.validateConfig(config)
+                assert.deepEqual(errors, tc.expect)
+            }
+        })
     })
     describe('getContextMenus', () => {
         it('returns config menus', () => {

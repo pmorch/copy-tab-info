@@ -18,14 +18,36 @@ import schemaValidator from './generated-code/config-schema-validate.js'
 // validateConfig returns null or any errors  as [{path, message}]
 export function validateConfig(config) {
     const isValid = schemaValidator(config)
-    if (isValid)
-        return null
-    return schemaValidator.errors.map(e => {
-        return {
-            path: e.instancePath,
-            message: e.message
+    if (! isValid)
+        return schemaValidator.errors.map(e => {
+            return {
+                path: e.instancePath,
+                message: e.message
+            }
+        })
+    const seenNames = {}
+    for (const [index, format] of config.formats.entries()) {
+        if (format.name === "") {
+            return [{
+                path: `/formats/${index}/name`,
+                message: "name is required"
+            }]
         }
-    })
+        if (format.name in seenNames) {
+            return [{
+                path: `/formats/${index}/name`,
+                message: `name "${format.name}" is not unique`
+            }]
+        }
+        if (format.template === "") {
+            return [{
+                path: `/formats/${index}/template`,
+                message: "template is required"
+            }]
+        }
+        seenNames[format.name] = true
+    }
+    return null
 }
 
 export function checkConfigSchema(config) {
