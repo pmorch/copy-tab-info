@@ -125,18 +125,18 @@ export default {
             </div>
         </nav>
         <h4 class="p-2 mb-0">{{ $route.meta.title }}</h4>
-        <div class="container.fluid p-2 d-flex flex-column flex-grow" v-if="$route.name == 'formats'">
-            <Formats :formats="config.formats" @formatsChanged="setFormats"></Formats>
+        <div class="p-2 flex-grow-1" v-if="$route.name == 'formats'">
+            <Formats class="foobar" :formats="config.formats" @formatsChanged="setFormats"></Formats>
         </div>
-        <div class="container.fluid p-2 d-flex flex-column h-100" v-else-if="$route.name == 'urlRules'">
+        <div class="p-2 flex-grow-1" v-else-if="$route.name == 'urlRules'">
             <URLRules :rules="config.urlRules" @urlRulesChanged="setUrlRules"></URLRules>
         </div>
-        <div class="container.fluid p-2 d-flex flex-column h-100" v-else-if="$route.name == 'editor'">
+        <div class="p-2 flex-grow-1 d-flex flex-column" v-else-if="$route.name == 'editor'">
             <MonacoEditor class="yaml-editor mb-4 flex-grow-1" :visible="isMonacoVisible()" :value="config"
                 @newValue="newConfig" @yamlValidationErrors="onYamlValidationErrors"
                 @configValidationErrors="onMonacoConfigValidationErrors" />
         </div>
-        <div class="container.fluid p-2 d-flex flex-column h-100" v-else>
+        <div class="p-2 flex-grow-1" v-else>
             No "{{ $route.meta.title }}" implementation yet
         </div>
         <div v-if="yamlValidationErrors != null" class="alert alert-danger" role="alert">
