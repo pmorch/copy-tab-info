@@ -104,7 +104,7 @@ export default {
                         </div>
                     </div>
                 </form>
-                <button type="button" class="btn btn-primary" @click="toggleEditing">Done</button>
+                <button type="button" class="btn btn-outline-primary btn-sm" @click="toggleEditing">Done</button>
             </div>
         </div>
         <div class="card-body format-card" @click="toggleEditing" v-else>
