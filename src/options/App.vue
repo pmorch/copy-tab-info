@@ -23,7 +23,7 @@ export default {
         return {
             config: null,
             yamlValidationErrors: null,
-            schemaValidationErrors: null,
+            configValidationErrors: null,
             pageNavItem: pageNavItems.filter(ni => ni.name === initialPageNavItemName)[0],
             pageNavItems,
         }
@@ -51,7 +51,7 @@ export default {
         newConfig(newValue) {
             this.config = newValue
             this.onYamlValidationErrors(null)
-            this.onSchemaValidationErrors(null)
+            this.onConfigValidationErrors(null)
         },
         isMonacoVisible() {
             return true
@@ -59,8 +59,8 @@ export default {
         onYamlValidationErrors(errors) {
             this.yamlValidationErrors = errors
         },
-        onSchemaValidationErrors(errors) {
-            this.schemaValidationErrors = errors
+        onConfigValidationErrors(errors) {
+            this.configValidationErrors = errors
         },
         saveConfig() {
             setConfig(this.config)
@@ -136,9 +136,9 @@ export default {
             <div class="h-100 d-flex flex-column">
                 <MonacoEditor class="yaml-editor mb-4 flex-grow-1" :visible="isMonacoVisible()" :value="config"
                     @newValue="newConfig" @yamlValidationErrors="onYamlValidationErrors"
-                    @schemaValidationErrors="onSchemaValidationErrors" />
+                    @configValidationErrors="onConfigValidationErrors" />
                 <div id="validation-errors-alerts" class="d-flex flex-column justify-content-center">
-                    <div v-if="yamlValidationErrors == null && schemaValidationErrors == null" class="alert alert-success"
+                    <div v-if="yamlValidationErrors == null && configValidationErrors == null" class="alert alert-success"
                         role="alert">
                         <b>YAML</b> and <b>Schema</b> are both valid
                     </div>
@@ -146,10 +146,10 @@ export default {
                         <p><b>YAML</b> is invalid:</p>
                         <pre class="mb-0">{{ yamlValidationErrors }}</pre>
                     </div>
-                    <div v-else-if="schemaValidationErrors != null" class="alert alert-danger" role="alert">
+                    <div v-else-if="configValidationErrors != null" class="alert alert-danger" role="alert">
                         <p><b>Schema</b> is invalid:</p>
-                        <p v-for="error in schemaValidationErrors">
-                            <code>{{ error.instancePath }}</code>: {{ error.message }}
+                        <p v-for="error in configValidationErrors">
+                            <code>{{ error.path }}</code>: {{ error.message }}
                         </p>
                     </div>
                 </div>
@@ -160,7 +160,7 @@ export default {
         </div>
         <div class="p-2">
             <button class="btn btn-primary"
-                :class="{ disabled: yamlValidationErrors != null || schemaValidationErrors != null }"
+                :class="{ disabled: yamlValidationErrors != null || configValidationErrors != null }"
                 @click="saveConfig">Save</button>
             <button type="button" class="ms-2 btn btn-secondary" data-bs-toggle="modal" data-bs-target="#resetConfigModal">
                 Reset configuration...

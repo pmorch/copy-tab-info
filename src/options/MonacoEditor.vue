@@ -8,7 +8,7 @@
 import throttle from 'lodash/throttle.js'
 import { parse, stringify } from 'yaml'
 
-import schemaValidator from '../generated-code/config-schema-validate.js'
+import { validateConfig } from '../config.js'
 import * as deep from '../deep.js'
 
 self.MonacoEnvironment = {
@@ -113,9 +113,10 @@ export default {
                 return
             }
             this.$emit('yamlValidationErrors', null)
-            const valid = schemaValidator(jsValue)
-            if (!valid) {
-                this.$emit('schemaValidationErrors', schemaValidator.errors)
+            const errors = validateConfig(jsValue)
+            if (errors) {
+                console.log(errors)
+                this.$emit('configValidationErrors', errors)
                 return
             }
             this.$emit('newValue', jsValue)

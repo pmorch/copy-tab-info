@@ -15,10 +15,24 @@ import yaml from 'yaml'
 // instead:
 import schemaValidator from './generated-code/config-schema-validate.js'
 
-export function checkConfigSchema(config) {
+// validateConfig returns null or any errors  as [{path, message}]
+export function validateConfig(config) {
     const isValid = schemaValidator(config)
-    if (!isValid)
-        throw new Error(`Unexpected errors from validating config: ${JSON.stringify(schemaValidator.errors, null, '    ')}`)
+    if (isValid)
+        return null
+    return schemaValidator.errors.map(e => {
+        return {
+            path: e.instancePath,
+            message: e.message
+        }
+    })
+}
+
+export function checkConfigSchema(config) {
+    const errors = validateConfig(config)
+    if (errors)
+        throw new Error("Unexpected errors from validating config: " +
+            JSON.stringify(errors, null, '    '))
 }
 
 export function contextMenus(config) {
