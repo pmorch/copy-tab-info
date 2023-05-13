@@ -22,6 +22,9 @@ async function getTabs() {
 
 function getRenderedTabs(tabs, config, formatName) {
   const format = config.formats.filter(e => e.name === formatName)[0]
+  if (!format) {
+    throw new Error(`How could ${formatName} be unknown and not in config.formats?`)
+  }
   const joinString = 'joinString' in format ? format.joinString : "\n"
   for (const tab of tabs) {
     applyUrlRules(tab, config.urlRules)
@@ -69,9 +72,6 @@ chrome.contextMenus.onClicked.addListener(async function (info, tab) {
   const formatName = info.menuItemId
   const tabs = await getTabs()
   const config = await getResolvedConfig()
-  if (!(formatName in config.formats)) {
-    throw new Error(`How could ${formatName} be unknown and not in config.formats?`)
-  }
   const text = getRenderedTabs(tabs, config, formatName)
   const data = { text }
   await writeToClipboard(data)
