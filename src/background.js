@@ -4,7 +4,7 @@ import Mustache from 'mustache'
 
 import { contextMenus } from './config.js'
 import { applyUrlRules } from './urlRules.js'
-import { getResolvedConfig } from './browserConfig.js'
+import { getResolvedConfig, onConfigChange } from './browserConfig.js'
 
 (async function () {
   try {
@@ -58,6 +58,7 @@ async function refreshContextMenu() {
 }
 
 refreshContextMenu()
+onConfigChange(refreshContextMenu)
 
 chrome.action.onClicked.addListener(async (tab) => {
   const tabs = await getTabs()
