@@ -19,6 +19,7 @@ export default {
             yamlValidationErrors: null,
             monacoConfigValidationErrors: null,
             routes,
+            saveButtonAnimationActive: false,
         }
     },
     async mounted() {
@@ -56,7 +57,11 @@ export default {
             this.monacoConfigValidationErrors = errors
         },
         saveConfig() {
+            this.saveButtonAnimationActive = true
             setConfig(this.config)
+            setTimeout(() => {
+                this.saveButtonAnimationActive = false
+            }, 200)
         },
         async resetConfig() {
             await resetBrowserConfig()
@@ -83,7 +88,16 @@ export default {
             if (this.monacoConfigValidationErrors)
                 return this.monacoConfigValidationErrors
             return validateConfig(this.config)
-        }
+        },
+        saveButtonClass() {
+            return {
+                btn: true,
+                'btn-primary': !this.saveButtonAnimationActive,
+                'btn-light': this.saveButtonAnimationActive,
+                disabled: this.yamlValidationErrors != null ||
+                    this.configValidationErrors != null
+            }
+        },
     },
     components: { Formats, URLRules, MonacoEditor }
 }
@@ -149,9 +163,7 @@ export default {
             </p>
         </div>
         <div class="p-2">
-            <button class="btn btn-primary"
-                :class="{ disabled: yamlValidationErrors != null || configValidationErrors != null }"
-                @click="saveConfig">Save</button>
+            <button :class="saveButtonClass" @click="saveConfig">Save</button>
             <button type="button" class="ms-2 btn btn-secondary" data-bs-toggle="modal" data-bs-target="#resetConfigModal">
                 Reset configuration...
             </button>
