@@ -117,8 +117,8 @@ export default {
             <div class="collapse navbar-collapse" id="navbarsExampleXxl">
                 <ul class="navbar-nav me-auto mb-0">
                     <li class="nav-item" v-for="route in routes">
-                        <a v-if="'name' in route" :class="navItemClass(route)"
-                            :aria-current="ariaCurrent(route)" :href="`#${route.path}`">{{ route.meta.title }}</a>
+                        <a v-if="'name' in route" :class="navItemClass(route)" :aria-current="ariaCurrent(route)"
+                            :href="`#${route.path}`">{{ route.meta.title }}</a>
                     </li>
                 </ul>
             </div>
