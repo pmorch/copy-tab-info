@@ -5,8 +5,8 @@
             <div class="fa fa-plus-circle"></div>  New Format
         </button>
     </div>
-    <VueDraggable v-model="formatsCopy" @start="dragging = true" @end="dragging = false">
-        <div v-for="(format, index) in formatsCopy" :key="`format-${index}`">
+    <VueDraggable :modelValue="formats" @start="dragging = true" @end="dragging = false">
+        <div v-for="(format, index) in formats" :key="`format-${index}`">
             <Format :format="format" :dragging="dragging" @formatChanged="nv => formatChanged(index, nv)"
                 @delete="formatDelete(index)"></Format>
         </div>
@@ -20,7 +20,6 @@ import Format from './Format.vue'
 export default {
     data() {
         return {
-            formatsCopy: [...this.formats],
             dragging: false,
         }
     },
@@ -28,45 +27,28 @@ export default {
     components: { VueDraggable, Format },
     emits: ['formatsChanged'],
     methods: {
+        formatsChanged(newFormats) {
+            this.$emit('formatsChanged', newFormats)
+        },
         formatChanged(index, nv) {
-            this.formatsCopy[index] = nv
+            const newFormats = [ ...this.formats ]
+            newFormats[index] = nv
+            this.formatsChanged(newFormats)
         },
         formatDelete(index) {
-            this.formatsCopy.splice(index, 1)
+            const newFormats = [ ...this.formats ]
+            newFormats.splice(index, 1)
+            this.formatsChanged(newFormats)
         },
         addFormat() {
-            this.formatsCopy.push({
+            const newFormats = [ ...this.formats ]
+            newFormats.push({
                 name: 'New Format',
                 template: 'Title: {{{title}}} URL: {{{URL}}}{{#suffix}} Suffix: {{{suffix}}}{{/suffix}}'
             })
+            this.formatsChanged(newFormats)
         }
     },
-    watch: {
-        formats: {
-            handler() {
-                const equal = deep.equal(this.formats, this.formatsCopy)
-                if (equal)
-                    return
-                const formatsCopy = [
-                    ...this.formats
-                ]
-                this.formatsCopy = formatsCopy
-            },
-            deep: true,
-        },
-        formatsCopy: {
-            handler() {
-                const equal = deep.equal(this.formats, this.formatsCopy)
-                if (equal)
-                    return
-                const formats = [
-                    ...this.formatsCopy
-                ]
-                this.$emit('formatsChanged', formats)
-            },
-            deep: true,
-        },
-    }
 }
 </script>
 
