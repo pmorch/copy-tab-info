@@ -36,10 +36,20 @@ export async function getConfig() {
 }
 
 export async function setConfig(config) {
+    if (! hasStorage()) {
+        console.log('Not actually setting configuration because '+
+                    'this is not running in an extension')
+        return
+    }
     await chrome.storage.sync.set({ config: stringify(config) })
 }
 
 export async function resetConfig() {
+    if (! hasStorage()) {
+        console.log('Not actually resetting configuration because '+
+                    'this is not running in an extension')
+        return
+    }
     await chrome.storage.sync.set({ config: factoryConfigYAML })
 }
 
