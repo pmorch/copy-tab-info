@@ -139,7 +139,7 @@ export default {
         </nav>
         <h4 class="p-2 mb-0">{{ $route.meta.title }}</h4>
         <div class="p-2 flex-grow-1" v-if="$route.name == 'formats'">
-            <Formats class="foobar" :formats="config.formats" @formatsChanged="setFormats"></Formats>
+            <Formats :formats="config.formats" @formatsChanged="setFormats"></Formats>
         </div>
         <div class="p-2 flex-grow-1" v-else-if="$route.name == 'urlRules'">
             <URLRules :rules="config.urlRules" @urlRulesChanged="setUrlRules"></URLRules>
