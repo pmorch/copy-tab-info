@@ -90,6 +90,34 @@ describe('urlRules', function () {
                 ],
                 input: { title: "suffix for foo", url: 'https://one.foo.com/some/page.html' },
                 expected: { title: "foo", url: 'https://one.foo.com/some/page.html', suffix: 'suffix' },
+            },
+            {
+                desc: "Pastebin - use value from url in title",
+                urlRules: [
+                    {
+                        urlPattern: 'https://pastebin.com/*',
+                        rules: [
+                            {
+                                field: 'url',
+                                match: 'https://pastebin.com/(?<pasteid>.+)$',
+                            },
+                            {
+                                field: 'title',
+                                match: '^(?<_title>.+) - Pastebin.com$',
+                                replacement: 'pastebin/${pasteid}: $<_title>',
+                            },
+                        ],
+                    }
+                ],
+                input: {
+                    title: "foobar - Pastebin.com",
+                    url: 'https://pastebin.com/U2FSNpDX'
+                },
+                expected: {
+                    title: "pastebin/U2FSNpDX: foobar",
+                    url: 'https://pastebin.com/U2FSNpDX',
+                    pasteid: "U2FSNpDX"
+                },
             }
         ]
         for (const test of tests) {

@@ -3,7 +3,6 @@ import memoize from 'lodash.memoize'
 
 const memoizedMatchPattern = memoize(matchPattern)
 
-
 export function applyUrlRule(fields, urlRule) {
     const matcher = memoizedMatchPattern(urlRule.urlPattern)
     if (! matcher.match(fields.url)) {
@@ -27,10 +26,15 @@ export function applyUrlRule(fields, urlRule) {
                 }
             }
         }
-        fields[rule.field] = fields[rule.field].replace(new RegExp(rule.match), rule.replacement)
+        if ('replacement' in rule) {
+            let replacement = rule.replacement
+            for (const field in fields) {
+                replacement = replacement.replace('${' + field + '}', fields[field])
+            }
+            fields[rule.field] = fields[rule.field].replace(new RegExp(rule.match), replacement)
+        }
     }
 }
-
 export function applyUrlRules(fields, urlRules) {
     for (const urlRule of urlRules) {
         applyUrlRule(fields, urlRule)

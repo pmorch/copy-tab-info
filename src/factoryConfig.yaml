@@ -31,3 +31,18 @@ urlRules:
       - field: title
         match: '^(?<suffix>.+) · Issue #(?<_issue_number>\d+) · (?<_project>.+)$'
         replacement: '$<_project> #$<_issue_number>'
+  - urlPattern: https://pastebin.com/*
+    rules:
+      # Turn:
+      #     foobar - Pastebin.com
+      #     https://pastebin.com/U2FSNpDX
+      # Into:
+      #     pastebin/U2FSNpDX: foobar
+      #     https://pastebin.com/U2FSNpDX
+      - field: url
+        # First get the pasteid (without a replacement)
+        match: https://pastebin.com/(?<pasteid>.+)$
+      - field: title
+        match: ^(?<_title>.+) - Pastebin.com$
+        # Now replace the pasteid field *from a previous rule*:
+        replacement: "pastebin/${pasteid}: $<_title>"

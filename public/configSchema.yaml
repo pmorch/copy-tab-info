@@ -1,3 +1,5 @@
+# This is a JSON Type Definition
+# https://jsontypedef.com/docs/jtd-in-5-minutes/
 optionalProperties:
   formats:
     elements:
@@ -28,5 +30,6 @@ optionalProperties:
                   - url
               match:
                 type: string
+            optionalProperties:
               replacement:
                 type: string
