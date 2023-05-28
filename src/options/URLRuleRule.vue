@@ -10,21 +10,16 @@ export default {
         doneEditing() {
             this.elementState.setEditing(false)
         },
-        deleteRule() {
-            this.$emit('delete')
-        },
         editing() {
             return this.elementState.getEditing()
         },
         setUseReplacement(event) {
             const nv = event.target.checked
-            console.log("this.setUseReplacement", nv)
             if (nv) {
                 this.rule.replacement = ""
             } else {
                 delete this.rule.replacement
             }
-            console.log("this.setUseReplacement after", this.rule)
         },
         emptyDisp(str) {
             if (str == '')
