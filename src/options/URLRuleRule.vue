@@ -15,6 +15,22 @@ export default {
         },
         editing() {
             return this.elementState.getEditing()
+        },
+        setUseReplacement(event) {
+            const nv = event.target.checked
+            console.log("this.setUseReplacement", nv)
+            if (nv) {
+                this.rule.replacement = ""
+            } else {
+                delete this.rule.replacement
+            }
+            console.log("this.setUseReplacement after", this.rule)
+        },
+        emptyDisp(str) {
+            if (str == '')
+                return '<empty-string>'
+            else
+                return str
         }
     },
 }
@@ -23,14 +39,20 @@ export default {
 <template>
     <div class="card-body">
         <div class="card-text" v-if="editing()">
-            <form class="was-validated">
+            <form>
                 <div class="form-group row">
-                    <label for="field" class="col-2 col-form-label">Field</label>
+                    <div class="col-2">Field</div>
                     <div class="col-10">
-                        <input type="text" class="form-control" id="field" v-model="rule.field" required>
-                    </div>
-                    <div class="invalid-feedback">
-                        Please provide a field for the rule.
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="field" id="field1" value="title"
+                                v-model="rule.field">
+                            <label class="form-check-label" for="field1">title</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="field" id="field1" value="url"
+                                v-model="rule.field">
+                            <label class="form-check-label" for="field1">URL</label>
+                        </div>
                     </div>
                 </div>
                 <div class="form-group row">
@@ -38,38 +60,43 @@ export default {
                     <div class="col-10">
                         <input type="text" class="form-control" id="match" v-model="rule.match" required>
                     </div>
-                    <div class="invalid-feedback">
-                        Please provide a match for the rule.
-                    </div>
                 </div>
                 <div class="form-group row">
-                    <label for="replacement" class="col-2 col-form-label">Replacement</label>
+                    <div class="col-2">Replacement</div>
                     <div class="col-10">
-                        <input type="text" class="form-control" id="replacement" v-model="rule.replacement">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="useReplacement"
+                                :checked="'replacement' in rule" @input="setUseReplacement">
+                            <label class="form-check-label" for="useReplacement">
+                                Use Replacement
+                            </label>
+                        </div>
+                        <input type="text" class="form-control" id="replacement" v-model="rule.replacement"
+                            v-if="'replacement' in rule">
                     </div>
                 </div>
             </form>
             <button type="button" class="btn btn-outline-primary btn-sm" @click="doneEditing">Done</button>
         </div>
         <div class="card-text" v-else>
-            {{ rule }}
+            <div>
+                <div class="field-name">
+                    Field
+                </div>
+                <div class="field-value"><code>{{ rule.field }}</code></div>
+            </div>
+            <div>
+                <div class="field-name">
+                    Match
+                </div>
+                <div class="field-value"><code>{{ emptyDisp(rule.match) }}</code></div>
+            </div>
+            <div v-if="'replacement' in rule">
+                <div class="field-name">
+                    Replacement
+                </div>
+                <div class="field-value"><code>{{ emptyDisp(rule.replacement) }}</code></div>
+            </div>
         </div>
     </div>
 </template>
-
-<style>
-.name,
-.value {
-    display: inline-block
-}
-
-.name {
-    width: 7em;
-}
-
-.question-icon {
-    color: black;
-    cursor: pointer;
-
-}
-</style>

@@ -54,6 +54,14 @@ export function validateConfig(config) {
                 message: "urlPattern is required"
             }]
         }
+        for (const [ruleIndex, rule] of urlRule.rules.entries()) {
+            if (rule.match === "") {
+                return [{
+                    path: `/urlRules/${index}/rules/${ruleIndex}/match`,
+                    message: "match is required"
+                }]
+            }
+        }
     }
     return null
 }
