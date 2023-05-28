@@ -61,14 +61,14 @@ export default {
         <div class="card-text" v-else>
             <div class="row me-5">
                 <div class="col-2">
-                    Rules
-                </div>
-                <div class="col-10">
-                    <div class="add-rule-button-container">
-                        <button type="button" class="btn btn-primary btn-sm" @click="addRule" title="New Format">
+                    Field Match Rules
+                    <div>
+                        <button type="button" class="mt-2 btn btn-primary btn-sm" @click="addRule" title="New Format">
                             <div class="fa fa-plus-circle"></div> New Rule
                         </button>
                     </div>
+                </div>
+                <div class="col-10">
                     <VueDraggable :modelValue="urlRule.rules" @start="rulesArrayState.setDragging(true)"
                         @end="rulesArrayState.setDragging(false)">
                         <ArrayElement :elementState="rulesArrayState.getElementState(index)" @delete="deleteRule(index)"
@@ -83,13 +83,4 @@ export default {
 </template>
 
 <style>
-.add-rule-button-container {
-    position: relative;
-}
-
-.add-rule-button-container .btn {
-    position: absolute;
-    top: -3.3em;
-    right: 0;
-}
 </style>
