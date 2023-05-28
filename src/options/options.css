@@ -1,0 +1,36 @@
+.field-name,
+.field-value {
+    display: inline-block
+}
+
+.field-name {
+    width: 7em;
+}
+
+.context-icon {
+    color: green;
+    cursor: pointer;
+    font-size: larger;
+}
+
+.no-context-icon {
+    color: #d63333;
+    cursor: pointer;
+    font-size: larger;
+}
+
+.edit-icon {
+    color: #d6a133;
+    cursor: pointer;
+}
+
+.trash-icon {
+    color: #d63333;
+    cursor: pointer;
+}
+
+.question-icon {
+    color: black;
+    cursor: pointer;
+
+}

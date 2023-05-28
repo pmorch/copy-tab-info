@@ -115,22 +115,22 @@ export default {
             </div>
             <div class="card-text">
                 <div class="line">
-                    <div class="name">
+                    <div class="field-name">
                         Template
                         <a href="https://mustache.github.io/mustache.5.html" target="_blank">
                             <div class="fa fa-question-circle-o question-icon" title="Template is a Mustache Template">
                             </div>
                         </a>
                     </div>
-                    <div class="value"><code>{{ format.template }}</code></div>
+                    <div class="field-value"><code>{{ format.template }}</code></div>
                 </div>
                 <div class="line" v-if="'joinString' in format">
-                    <div class="name">Join string</div>
-                    <div class="value"><code>{{ format.joinString }}</code></div>
+                    <div class="field-name">Join string</div>
+                    <div class="field-value"><code>{{ format.joinString }}</code></div>
                 </div>
                 <div class="line">
-                    <div class="name">Context menu</div>
-                    <div class="value">
+                    <div class="field-name">Context menu</div>
+                    <div class="field-value">
                         <div v-if="contextMenuBool" class="fa fa-check context-icon" title="Not in context menu"></div>
                         <div v-else class="fa fa-times no-context-icon" title="Not in context menu"></div>
                     </div>
@@ -145,15 +145,6 @@ div.format {
     cursor: grab;
 }
 
-.name,
-.value {
-    display: inline-block
-}
-
-.name {
-    width: 7em;
-}
-
 .format-card {
     position: relative;
 
@@ -163,33 +154,5 @@ div.format {
     position: absolute;
     top: 0;
     right: 0;
-}
-
-.context-icon {
-    color: green;
-    cursor: pointer;
-    font-size: larger;
-}
-
-.no-context-icon {
-    color: #d63333;
-    cursor: pointer;
-    font-size: larger;
-}
-
-.edit-icon {
-    color: #d6a133;
-    cursor: pointer;
-}
-
-.trash-icon {
-    color: #d63333;
-    cursor: pointer;
-}
-
-.question-icon {
-    color: black;
-    cursor: pointer;
-
 }
 </style>

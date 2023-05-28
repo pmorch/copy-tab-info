@@ -3,6 +3,7 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 import 'bootstrap/dist/js/bootstrap.esm.js'
 
 import 'font-awesome/css/font-awesome.css'
+import './options.css'
 
 import { validateConfig } from '../config.js'
 import routes from './routes'
