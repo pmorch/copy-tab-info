@@ -83,22 +83,6 @@ export default {
 </template>
 
 <style>
-.name,
-.value {
-    display: inline-block
-}
-
-.name {
-    width: 7em;
-}
-
-.question-icon {
-    color: black;
-    cursor: pointer;
-
-}
-
-
 .add-rule-button-container {
     position: relative;
 }
