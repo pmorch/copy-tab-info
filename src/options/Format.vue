@@ -9,7 +9,7 @@ export default {
     emits: ['formatChanged', 'delete'],
     watch: {
         dragging(nv) {
-            // HACK: When dragging starts, disable editing. Because otherwise if
+            // When dragging starts, disable editing. Because otherwise if
             // formats[0] is being edited before the drag, formats[0] will also
             // be editing after the drag, but then it will be a different
             // element. This is because in Formats.vue (the parent component) we

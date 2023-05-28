@@ -47,6 +47,14 @@ export function validateConfig(config) {
         }
         seenNames[format.name] = true
     }
+    for (const [index, urlRule] of config.urlRules.entries()) {
+        if (urlRule.urlPattern === "") {
+            return [{
+                path: `/urlRules/${index}/urlPattern`,
+                message: "urlPattern is required"
+            }]
+        }
+    }
     return null
 }
 

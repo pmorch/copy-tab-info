@@ -1,63 +1,62 @@
 <script>
-
-import * as deep from '../deep.js'
-
-function computeListFromRules(rules) {
-    return rules.map((e, index) => {
-        return {
-            index,
-            rule: e
-        }
-    })
-}
-
-function computeRulesFromList(list) {
-    return list.map((e) => e.rule)
-}
-
+import { reactive } from 'vue'
 import { VueDraggable } from 'vue-draggable-plus'
+import arrayState from './arrayState.js'
+import ArrayElement from './ArrayElement.vue'
+import URLRule from './URLRule.vue'
 export default {
     data() {
         return {
-            list: computeListFromRules(this.rules)
+            arrayState: reactive(new arrayState()),
         }
     },
     props: {
-        rules: null,
+        urlRules: null,
     },
-    components: { VueDraggable },
     methods: {
-    },
-    watch: {
-        list: {
-            handler(nv) {
-                const rules = computeRulesFromList(nv)
-                if (deep.equal(rules, this.rules))
-                    return
-                // console.log('wlist', nv)
-                this.$emit('urlRulesChanged', rules)
-            },
-            deep: true
+        addUrlRule() {
+            // Add a new urlRule with bogus data
+            this.urlRules.push({
+                urlPattern: "https://new-website/*",
+                rules: [{
+                    field: 'title',
+                    match: '^Some (?<_demo>regexp)$',
+                    replacement: "Other $<_demo>"
+                }]
+            })
         },
-        rules: {
-            handler(nv) {
-                const rules = computeRulesFromList(this.list)
-                if (deep.equal(rules, nv))
-                    return
-                // console.log('wrules', nv)
-                const list = computeListFromRules(nv)
-                this.list = list
-            },
-            deep: true
+        deleteUrlRule(index) {
+            this.urlRules.splice(index, 1)
         }
-    }
+    },
+    components: { VueDraggable, URLRule, ArrayElement },
 }
 </script>
 
 <template>
-    <VueDraggable ref="el" v-model="list">
-        <div v-for="item in list" :key="item.index">
-            {{ item }}
+    <div class="add-urlRule-button-container">
+        <button type="button" class="btn btn-primary btn-sm" @click="addUrlRule" title="New Format">
+            <div class="fa fa-plus-circle"></div> New URL Rule
+        </button>
+    </div>
+    <VueDraggable :modelValue="urlRules" @start="arrayState.setDragging(true)" @end="arrayState.setDragging(false)">
+        <div v-for="(urlRule, index) in urlRules" :key="index">
+            <ArrayElement :elementState="arrayState.getElementState(index)" @delete="deleteUrlRule(index)">
+                <URLRule :elementState="arrayState.getElementState(index)" :urlRule="urlRule"
+                    @urlRuleChanged="nv => urlRuleChanged(index, nv)" />
+            </ArrayElement>
         </div>
     </VueDraggable>
 </template>
+
+<style>
+.add-urlRule-button-container {
+    position: relative;
+}
+
+.add-urlRule-button-container .btn {
+    position: absolute;
+    top: -2.6em;
+    right: 0;
+}
+</style>

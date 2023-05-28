@@ -5,6 +5,7 @@
             <div class="fa fa-plus-circle"></div>  New Format
         </button>
     </div>
+    Dragging: {{ dragging }}<br>
     <VueDraggable :modelValue="formats" @start="dragging = true" @end="dragging = false">
         <div v-for="(format, index) in formats" :key="`format-${index}`">
             <Format :format="format" :dragging="dragging" @formatChanged="nv => formatChanged(index, nv)"
@@ -14,7 +15,6 @@
 </template>
 
 <script>
-import * as deep from '../deep.js'
 import { VueDraggable } from 'vue-draggable-plus'
 import Format from './Format.vue'
 export default {

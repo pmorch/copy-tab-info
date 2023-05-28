@@ -76,9 +76,6 @@ export default {
         ariaCurrent(item) {
             return item.name == this.$route.name
         },
-        setUrlRules(nv) {
-            this.config.urlRules = nv
-        },
         setFormats(nv) {
             this.config.formats = nv
         },
@@ -142,7 +139,7 @@ export default {
             <Formats :formats="config.formats" @formatsChanged="setFormats"></Formats>
         </div>
         <div class="p-2 flex-grow-1" v-else-if="$route.name == 'urlRules'">
-            <URLRules :rules="config.urlRules" @urlRulesChanged="setUrlRules"></URLRules>
+            <URLRules :url-rules="config.urlRules"></URLRules>
         </div>
         <div class="p-2 flex-grow-1 d-flex flex-column" v-else-if="$route.name == 'editor'">
             <MonacoEditor class="yaml-editor mb-4 flex-grow-1" :visible="isMonacoVisible()" :value="config"
