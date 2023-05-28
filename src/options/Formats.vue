@@ -61,4 +61,5 @@ export default {
     position: absolute;
     top: -2.6em;
     right: 0;
-}</style>
+}
+</style>

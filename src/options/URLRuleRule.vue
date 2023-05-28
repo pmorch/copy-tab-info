@@ -8,7 +8,7 @@ export default {
     emits: ['ruleChanged', 'delete'],
     methods: {
         doneEditing() {
-        this.elementState.setEditing(false)
+            this.elementState.setEditing(false)
         },
         deleteRule() {
             this.$emit('delete')
@@ -52,7 +52,7 @@ export default {
             <button type="button" class="btn btn-outline-primary btn-sm" @click="doneEditing">Done</button>
         </div>
         <div class="card-text" v-else>
-            {{  rule }}
+            {{ rule }}
         </div>
     </div>
 </template>
