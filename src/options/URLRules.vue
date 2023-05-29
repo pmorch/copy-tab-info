@@ -1,6 +1,5 @@
 <script>
 import { reactive } from 'vue'
-import { VueDraggable } from 'vue-draggable-plus'
 import cardArrayState from './cardArrayState.js'
 import CardArray from './CardArray.vue'
 import CardArrayElement from './CardArrayElement.vue'
@@ -27,7 +26,7 @@ export default {
             })
         },
     },
-    components: { VueDraggable, URLRule, CardArray, CardArrayElement },
+    components: { URLRule, CardArray, CardArrayElement },
 }
 </script>
 
@@ -38,10 +37,10 @@ export default {
         </button>
     </div>
     <CardArray :arrayState="arrayState">
-            <CardArrayElement :arrayState="arrayState" :index="index" v-for="(urlRule, index) in urlRules" :key="index">
-                <URLRule :elementState="arrayState.getElementState(index)" :urlRule="urlRule"
-                    @urlRuleChanged="nv => urlRuleChanged(index, nv)" />
-            </CardArrayElement>
+        <CardArrayElement :arrayState="arrayState" :index="index" v-for="(urlRule, index) in urlRules" :key="index">
+            <URLRule :elementState="arrayState.getElementState(index)" :urlRule="urlRule"
+                @urlRuleChanged="nv => urlRuleChanged(index, nv)" />
+        </CardArrayElement>
     </CardArray>
 </template>
 

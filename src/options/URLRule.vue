@@ -1,6 +1,5 @@
 <script>
 import { reactive } from 'vue'
-import { VueDraggable } from 'vue-draggable-plus'
 import cardArrayState from './cardArrayState.js'
 import CardArray from './CardArray.vue'
 import CardArrayElement from './CardArrayElement.vue'
@@ -18,9 +17,6 @@ export default {
         doneEditing() {
             this.elementState.setEditing(false)
         },
-        deleteUrlRule() {
-            this.$emit('delete')
-        },
         addRule() {
             this.urlRule.rules.push({
                 field: 'title',
@@ -32,7 +28,7 @@ export default {
             return this.elementState.getEditing()
         }
     },
-    components: { VueDraggable, CardArray, CardArrayElement, URLRuleRule },
+    components: { CardArray, CardArrayElement, URLRuleRule },
 }
 </script>
 
@@ -68,8 +64,8 @@ export default {
                 </div>
                 <div class="col-10">
                     <CardArray :arrayState="rulesArrayState">
-                        <CardArrayElement :arrayState="rulesArrayState" :index="index" v-for="(rule, index) in urlRule.rules"
-                            :key="index">
+                        <CardArrayElement :arrayState="rulesArrayState" :index="index"
+                            v-for="(rule, index) in urlRule.rules" :key="index">
                             <URLRuleRule :elementState="rulesArrayState.getElementState(index)" :rule="rule" />
                         </CardArrayElement>
                     </CardArray>
