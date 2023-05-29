@@ -1,9 +1,5 @@
 <script>
 export default {
-    data() {
-        return {
-        }
-    },
     props: ['rule', 'elementState'],
     emits: ['ruleChanged', 'delete'],
     methods: {

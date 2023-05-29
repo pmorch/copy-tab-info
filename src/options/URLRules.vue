@@ -31,27 +31,14 @@ export default {
 </script>
 
 <template>
-    <div class="add-urlRule-button-container">
+    <div class="add-element-button-container">
         <button type="button" class="btn btn-primary btn-sm" @click="addUrlRule" title="New Format">
             <div class="fa fa-plus-circle"></div> New URL Rule
         </button>
     </div>
     <CardArray :arrayState="arrayState">
         <CardArrayElement :arrayState="arrayState" :index="index" v-for="(urlRule, index) in urlRules" :key="index">
-            <URLRule :elementState="arrayState.getElementState(index)" :urlRule="urlRule"
-                @urlRuleChanged="nv => urlRuleChanged(index, nv)" />
+            <URLRule :elementState="arrayState.getElementState(index)" :urlRule="urlRule"/>
         </CardArrayElement>
     </CardArray>
 </template>
-
-<style>
-.add-urlRule-button-container {
-    position: relative;
-}
-
-.add-urlRule-button-container .btn {
-    position: absolute;
-    top: -2.6em;
-    right: 0;
-}
-</style>

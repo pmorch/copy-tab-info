@@ -12,7 +12,6 @@ export default {
         }
     },
     props: ['urlRule', 'elementState'],
-    emits: ['urlRuleChanged', 'delete'],
     methods: {
         doneEditing() {
             this.elementState.setEditing(false)

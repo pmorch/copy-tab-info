@@ -1,3 +1,13 @@
+.add-element-button-container {
+    position: relative;
+}
+
+.add-element-button-container .btn {
+    position: absolute;
+    top: -2.6em;
+    right: 0;
+}
+
 .field-name,
 .field-value {
     display: inline-block
