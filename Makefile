@@ -27,3 +27,8 @@ lint:
 
 format:
 	$(ECHO) npx prettier --write src/
+
+clean:
+	@echo cleaning
+	$(ECHO) $(MAKE) -C generate clean
+	$(ECHO) rm -rf dist
