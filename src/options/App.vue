@@ -77,9 +77,6 @@ export default {
         ariaCurrent(item) {
             return item.name == this.$route.name
         },
-        setFormats(nv) {
-            this.config.formats = nv
-        },
     },
     computed: {
         configValidationErrors() {
@@ -137,7 +134,7 @@ export default {
         </nav>
         <h4 class="p-2 mb-0">{{ $route.meta.title }}</h4>
         <div class="p-2 flex-grow-1" v-if="$route.name == 'formats'">
-            <Formats :formats="config.formats" @formatsChanged="setFormats"></Formats>
+            <Formats :formats="config.formats"></Formats>
         </div>
         <div class="p-2 flex-grow-1" v-else-if="$route.name == 'urlRules'">
             <URLRules :url-rules="config.urlRules"></URLRules>
