@@ -1,18 +1,3 @@
-<template>
-    <!-- This extra div is necessary to avoid button becoming 100% wide -->
-    <div class="add-format-button-container">
-        <button type="button" class="btn btn-primary btn-sm" @click="addFormat" title="New Format">
-            <div class="fa fa-plus-circle"></div>  New Format
-        </button>
-    </div>
-    <VueDraggable :modelValue="formats" @start="dragging = true" @end="dragging = false">
-        <div v-for="(format, index) in formats" :key="`format-${index}`">
-            <Format :format="format" :dragging="dragging" @formatChanged="nv => formatChanged(index, nv)"
-                @delete="formatDelete(index)"></Format>
-        </div>
-    </VueDraggable>
-</template>
-
 <script>
 import { VueDraggable } from 'vue-draggable-plus'
 import Format from './Format.vue'
@@ -50,6 +35,21 @@ export default {
     },
 }
 </script>
+
+<template>
+    <!-- This extra div is necessary to avoid button becoming 100% wide -->
+    <div class="add-format-button-container">
+        <button type="button" class="btn btn-primary btn-sm" @click="addFormat" title="New Format">
+            <div class="fa fa-plus-circle"></div>  New Format
+        </button>
+    </div>
+    <VueDraggable :modelValue="formats" @start="dragging = true" @end="dragging = false">
+        <div v-for="(format, index) in formats" :key="`format-${index}`">
+            <Format :format="format" :dragging="dragging" @formatChanged="nv => formatChanged(index, nv)"
+                @delete="formatDelete(index)"></Format>
+        </div>
+    </VueDraggable>
+</template>
 
 <style>
 .add-format-button-container {
