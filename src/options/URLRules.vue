@@ -1,13 +1,14 @@
 <script>
 import { reactive } from 'vue'
 import { VueDraggable } from 'vue-draggable-plus'
-import arrayState from './arrayState.js'
-import ArrayElement from './ArrayElement.vue'
+import cardArrayState from './cardArrayState.js'
+import CardArray from './CardArray.vue'
+import CardArrayElement from './CardArrayElement.vue'
 import URLRule from './URLRule.vue'
 export default {
     data() {
         return {
-            arrayState: reactive(new arrayState()),
+            arrayState: reactive(new cardArrayState(this.urlRules)),
         }
     },
     props: {
@@ -25,11 +26,8 @@ export default {
                 }]
             })
         },
-        deleteUrlRule(index) {
-            this.urlRules.splice(index, 1)
-        }
     },
-    components: { VueDraggable, URLRule, ArrayElement },
+    components: { VueDraggable, URLRule, CardArray, CardArrayElement },
 }
 </script>
 
@@ -39,14 +37,12 @@ export default {
             <div class="fa fa-plus-circle"></div> New URL Rule
         </button>
     </div>
-    <VueDraggable :modelValue="urlRules" @start="arrayState.setDragging(true)" @end="arrayState.setDragging(false)">
-        <div v-for="(urlRule, index) in urlRules" :key="index">
-            <ArrayElement :elementState="arrayState.getElementState(index)" @delete="deleteUrlRule(index)">
+    <CardArray :arrayState="arrayState">
+            <CardArrayElement :arrayState="arrayState" :index="index" v-for="(urlRule, index) in urlRules" :key="index">
                 <URLRule :elementState="arrayState.getElementState(index)" :urlRule="urlRule"
                     @urlRuleChanged="nv => urlRuleChanged(index, nv)" />
-            </ArrayElement>
-        </div>
-    </VueDraggable>
+            </CardArrayElement>
+    </CardArray>
 </template>
 
 <style>

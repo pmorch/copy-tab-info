@@ -4,15 +4,14 @@ export default {
         return {
         }
     },
-    props: ['index', 'elementState' ],
+    props: ['index', 'arrayState' ],
     emits: ['delete'],
     methods: {
         edit() {
-            this.elementState.setEditing(true)
+            this.arrayState.setEditing(this.index, true)
         },
         deleteElement() {
-            this.elementState.disableAllEditing()
-            this.$emit('delete')
+            this.arrayState.deleteElement(this.index)
         }
     },
     components: {},
@@ -21,7 +20,7 @@ export default {
 
 <template>
     <div class="card my-2 arrayElement">
-        <div class="arrayElement-controls"  v-if="! elementState.getEditing()">
+        <div class="arrayElement-controls"  v-if="! arrayState.getEditing(index)">
             <div class="p-2 fa fa-pencil edit-icon" title="Edit" @click="edit"></div>
             <div class="fa fa-trash p-2 trash-icon" title="Delete" @click.stop="deleteElement"></div>
         </div>

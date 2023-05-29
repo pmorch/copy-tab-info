@@ -1,4 +1,4 @@
-class arrayElementState {
+class elementState {
     constructor(arrayState, index) {
         this.arrayState = arrayState
         this.index = index
@@ -18,9 +18,17 @@ class arrayElementState {
 }
 
 export default class arrayState {
-    constructor() {
+    constructor(array) {
+        this.array = array
         this.isDragging = false
         this.isEditing = {}
+    }
+    getArray() {
+        return this.array
+    }
+    deleteElement(index) {
+        this.disableAllEditing()
+        this.array.splice(index, 1)
     }
     getDragging() {
         return this.isDragging
@@ -37,7 +45,7 @@ export default class arrayState {
         }
     }
     getElementState(index) {
-        return new arrayElementState(this, index)
+        return new elementState(this, index)
     }
     setEditing(index, nv) {
         if (nv) {

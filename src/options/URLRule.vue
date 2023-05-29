@@ -1,14 +1,15 @@
 <script>
 import { reactive } from 'vue'
 import { VueDraggable } from 'vue-draggable-plus'
-import arrayState from './arrayState.js'
-import ArrayElement from './ArrayElement.vue'
+import cardArrayState from './cardArrayState.js'
+import CardArray from './CardArray.vue'
+import CardArrayElement from './CardArrayElement.vue'
 import URLRuleRule from './URLRuleRule.vue'
 
 export default {
     data() {
         return {
-            rulesArrayState: reactive(new arrayState()),
+            rulesArrayState: reactive(new cardArrayState(this.urlRule.rules)),
         }
     },
     props: ['urlRule', 'elementState'],
@@ -27,14 +28,11 @@ export default {
                 replacement: "Other $<_demo>"
             })
         },
-        deleteRule(index) {
-            this.urlRule.rules.splice(index, 1)
-        },
         editing() {
             return this.elementState.getEditing()
         }
     },
-    components: { VueDraggable, ArrayElement, URLRuleRule },
+    components: { VueDraggable, CardArray, CardArrayElement, URLRuleRule },
 }
 </script>
 
@@ -69,18 +67,16 @@ export default {
                     </div>
                 </div>
                 <div class="col-10">
-                    <VueDraggable :modelValue="urlRule.rules" @start="rulesArrayState.setDragging(true)"
-                        @end="rulesArrayState.setDragging(false)">
-                        <ArrayElement :elementState="rulesArrayState.getElementState(index)" @delete="deleteRule(index)"
-                            v-for="(rule, index) in urlRule.rules" :key="index">
+                    <CardArray :arrayState="rulesArrayState">
+                        <CardArrayElement :arrayState="rulesArrayState" :index="index" v-for="(rule, index) in urlRule.rules"
+                            :key="index">
                             <URLRuleRule :elementState="rulesArrayState.getElementState(index)" :rule="rule" />
-                        </ArrayElement>
-                    </VueDraggable>
+                        </CardArrayElement>
+                    </CardArray>
                 </div>
             </div>
         </div>
     </div>
 </template>
 
-<style>
-</style>
+<style></style>
