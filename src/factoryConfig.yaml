@@ -10,7 +10,7 @@ formats:
     contextMenu: false
   - name: Markdown
     template: '[{{{title}}}]({{{url}}}){{#suffix}}: "{{{.}}}"{{/suffix}}'
-  - name: Asciidoc
+  - name: AsciiDoc
     template: 'link:{{{url}}}({{{title}}}){{#suffix}}: "{{{.}}}"{{/suffix}}'
 remoteRules: []
   # See https://www.jsdelivr.com/?docs=gh
