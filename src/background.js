@@ -2,7 +2,7 @@
 
 import Mustache from 'mustache'
 
-import { contextMenus } from './config.js'
+import { contextMenus, originalName } from './config.js'
 import { applyUrlRules } from './urlRules.js'
 import { getResolvedConfig, onConfigChange } from './browserConfig.js'
 
@@ -30,6 +30,10 @@ function getRenderedTabs(tabs, config, formatName) {
     applyUrlRules(tab, config.urlRules)
   }
   return tabs.map(t => Mustache.render(format.template, t)).join(joinString)
+}
+
+function getOriginalRenderedTabs(tabs) {
+  return tabs.map(t => Mustache.render("{{{title}}}\n{{{url}}}", t)).join("\n")
 }
 
 async function writeToClipboard(data) {
@@ -72,8 +76,13 @@ chrome.action.onClicked.addListener(async (tab) => {
 chrome.contextMenus.onClicked.addListener(async function (info, tab) {
   const formatName = info.menuItemId
   const tabs = await getTabs()
-  const config = await getResolvedConfig()
-  const text = getRenderedTabs(tabs, config, formatName)
+  let text
+  if (formatName == originalName()) {
+    text = getOriginalRenderedTabs(tabs)
+  } else {
+    const config = await getResolvedConfig()
+    text = getRenderedTabs(tabs, config, formatName)
+  }
   const data = { text }
   await writeToClipboard(data)
 })

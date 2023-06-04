@@ -18,7 +18,7 @@ import schemaValidator from './generated-code/config-schema-validate.js'
 // validateConfig returns null or any errors  as [{path, message}]
 export function validateConfig(config) {
     const isValid = schemaValidator(config)
-    if (! isValid)
+    if (!isValid)
         return schemaValidator.errors.map(e => {
             return {
                 path: e.instancePath,
@@ -73,17 +73,33 @@ export function checkConfigSchema(config) {
             JSON.stringify(errors, null, '    '))
 }
 
+
+export function originalName() {
+    return 'Original Text'
+}
+
 export function contextMenus(config) {
     let cmenus = []
+    function addMenuItem(name, type = "normal") {
+        cmenus.push({
+            id: name,
+            title: name,
+            contexts: ["action"],
+            type,
+        })
+    }
+    let seenOriginal = false
     for (const format of config.formats) {
         if (('contextMenu' in format) && !format.contextMenu) {
             continue;
         }
-        cmenus.push({
-            id: format.name,
-            title: format.name,
-            contexts: ["action"]
-        })
+        addMenuItem(format.name)
+        if (format.title === originalName())
+            seenOriginal = true
+    }
+    if (!seenOriginal) {
+        addMenuItem(originalName() + 'Separator', 'separator')
+        addMenuItem(originalName())
     }
     return cmenus
 }
