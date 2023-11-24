@@ -4,7 +4,7 @@ const fs = require('fs');
 
 const iconName = 'link'
 const color = '#1467eb'
-const sizes = [16, 32, 48, 64, 128]
+const sizes = [16, 32, 48, 64, 128, 256, 512]
 
 const icons = svgfont2js(
   fs.readFileSync(
