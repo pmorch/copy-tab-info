@@ -25,12 +25,12 @@ urlRules:
   - urlPattern: https://github.com/*/*/issues/*
     rules:
       # Turn "Some Title · Issue #1234 · user/proj"
-      # Into "user/proj #1234: Some Title"
+      # Into "user/proj#1234: Some Title"
       # and store Some Title as field 'suffix'
       # (we'll also create fields _issue_number and _project but discard them because of the leading '_')
       - field: title
         match: '^(?<suffix>.+) · Issue #(?<_issue_number>\d+) · (?<_project>.+)$'
-        replacement: '$<_project> #$<_issue_number>'
+        replacement: '$<_project>#$<_issue_number>'
   - urlPattern: https://pastebin.com/*
     rules:
       # Turn:
