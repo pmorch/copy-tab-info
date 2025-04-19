@@ -26,6 +26,7 @@ export default defineConfig({
     }
   },
   build: {
+    sourcemap: true,
     rollupOptions: {
       input: {
         options: resolve(__dirname, 'src', 'options', 'options.html'),
@@ -33,7 +34,6 @@ export default defineConfig({
         offscreen: resolve(__dirname, 'src', 'offscreen', 'offscreen.html'),
       },
       output: {
-        sourcemap: true,
         entryFileNames: (assetInfo) => {
           // assetInfo.facadeModuleId contains the input file's full path
           if (assetInfo.facadeModuleId && assetInfo.facadeModuleId.match(/\.js$/)) {

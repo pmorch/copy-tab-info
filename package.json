@@ -31,7 +31,7 @@
   "devDependencies": {
     "@ladjs/svgfont2js": "^1.0.1",
     "@rushstack/eslint-patch": "^1.2.0",
-    "@vitejs/plugin-vue": "^4.0.0",
+    "@vitejs/plugin-vue": "^5.2.3",
     "@vue/eslint-config-prettier": "^7.1.0",
     "adm-zip": "^0.5.10",
     "ajv-cli": "^5.0.0",
@@ -42,6 +42,6 @@
     "png-to-ico": "^2.1.8",
     "prettier": "^2.8.4",
     "sharp": "^0.32.1",
-    "vite": "^4.1.4"
+    "vite": "^6.3.2"
   }
 }
