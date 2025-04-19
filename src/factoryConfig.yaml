@@ -1,6 +1,6 @@
 formats:
   - name: HTML
-    template: '<a href="{{url}}">{{title}}<a>{{#suffix}}: "{{.}}"{{/suffix}}'
+    template: '<a href="{{url}}">{{title}}</a>{{#suffix}}: "{{.}}"{{/suffix}}'
     joinString: <br>
     contextMenu: false
   - name: text
