@@ -6,15 +6,6 @@ import { contextMenus, originalName } from './config.js'
 import { applyUrlRules } from './urlRules.js'
 import { getResolvedConfig, onConfigChange } from './browserConfig.js'
 
-(async function () {
-  try {
-    const config = await getResolvedConfig()
-    console.log("TODO: Removeme - config is", config)
-  } catch (e) {
-    console.log("error from getConfigWithRemotesResolved", e)
-  }
-})()
-
 async function getTabs() {
   const rawTabs = await chrome.tabs.query({ highlighted: true, currentWindow: true });
   return rawTabs.map((t) => { return { title: t.title, url: t.url } });
@@ -61,30 +52,36 @@ async function refreshContextMenu() {
   }
 }
 
-refreshContextMenu()
-onConfigChange(refreshContextMenu)
-
-chrome.action.onClicked.addListener(async (tab) => {
-  const tabs = await getTabs()
-  const config = await getResolvedConfig()
-  const HTML = getRenderedTabs(tabs, config, 'HTML')
-  const text = getRenderedTabs(tabs, config, 'text')
-  const data = { text, HTML }
-  await writeToClipboard(data)
-})
-
-chrome.contextMenus.onClicked.addListener(async function (info, tab) {
-  const formatName = info.menuItemId
-  const tabs = await getTabs()
-  let text
-  if (formatName == originalName()) {
-    text = getOriginalRenderedTabs(tabs)
-  } else {
+function setupOnclickedHandlers() {
+  chrome.action.onClicked.addListener(async (tab) => {
+    const tabs = await getTabs()
     const config = await getResolvedConfig()
-    text = getRenderedTabs(tabs, config, formatName)
-  }
-  const data = { text }
-  await writeToClipboard(data)
-})
+    const HTML = getRenderedTabs(tabs, config, 'HTML')
+    const text = getRenderedTabs(tabs, config, 'text')
+    const data = { text, HTML }
+    await writeToClipboard(data)
+  })
+
+  chrome.contextMenus.onClicked.addListener(async function (info, tab) {
+    const formatName = info.menuItemId
+    const tabs = await getTabs()
+    let text
+    if (formatName == originalName()) {
+      text = getOriginalRenderedTabs(tabs)
+    } else {
+      const config = await getResolvedConfig()
+      text = getRenderedTabs(tabs, config, formatName)
+    }
+    const data = { text }
+    await writeToClipboard(data)
+  })
+}
+
+(async function () {
+  const config = await getResolvedConfig()
+  await refreshContextMenu()
+  onConfigChange(refreshContextMenu)
+  setupOnclickedHandlers()
+})()
 
 console.log("background.js loaded")
