@@ -12,7 +12,7 @@ async function remoteConfigFetcher(url) {
 }
 
 export async function getResolvedConfig() {
-    return await resolveRemoteConfigs(getConfig(), remoteConfigFetcher)
+    return await resolveRemoteConfigs(await getConfig(), remoteConfigFetcher)
 }
 
 function hasStorage() {
